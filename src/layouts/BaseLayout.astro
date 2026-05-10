@@ -10,7 +10,6 @@ const { title, description, currentPath = '' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="view-transition" content="same-origin" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | X-ATCN</title>
     <meta name="description" content={description || '极简科技风个人博客'} />
@@ -41,12 +40,6 @@ const { title, description, currentPath = '' } = Astro.props;
   ::selection { background-color: #002FA7; color: white; }
   .dark ::selection { background-color: #1A67FF; color: white; }
   html { scroll-behavior: smooth; }
-  /* View Transitions — 页面切换动画 */
-  @view-transition { navigation: auto; }
-  ::view-transition-old(root) { animation: 0.25s ease-out both vt-fade-out; }
-  ::view-transition-new(root) { animation: 0.35s ease-out both vt-fade-in; }
-  @keyframes vt-fade-out { to { opacity: 0; transform: translateY(-6px); } }
-  @keyframes vt-fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   /* 统计数字加载骨架 */
   .stats-counter .views-count:empty::after,
   .stats-counter .likes-count:empty::after,
@@ -78,29 +71,6 @@ const { title, description, currentPath = '' } = Astro.props;
   .prose code { font-size: 0.875em; padding: 0.15em 0.4em; border-radius: 4px; }
   .prose pre code { padding: 0; }
 </style>
-<style>
-  /* 页面切换 — 初始隐藏防闪烁 */
-  body { opacity: 0; transition: opacity 0.3s ease; }
-  body.ready { opacity: 1; }
-</style>
-<script>
-  // 页面淡入
-  document.addEventListener('DOMContentLoaded', () => {
-    requestAnimationFrame(() => {
-      document.body.classList.add('ready');
-    });
-  });
-  // 拦截站内导航 — 淡出后跳转
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href]');
-    if (!a) return;
-    const href = a.getAttribute('href');
-    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('//') || a.target === '_blank') return;
-    e.preventDefault();
-    document.body.style.opacity = '0';
-    setTimeout(() => { location.href = href; }, 250);
-  });
-</script>
 <script>
   // 暗色模式切换
   document.getElementById('theme-toggle').addEventListener('click', () => {
