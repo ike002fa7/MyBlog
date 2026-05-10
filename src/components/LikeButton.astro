@@ -7,26 +7,3 @@ const { slug } = Astro.props;
   <span>点赞</span>
   <span class="like-count">0</span>
 </button>
-<script>
-  (function() {
-    var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
-    var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
-    document.querySelectorAll('.like-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        if (this.dataset.liked === 'true') return;
-        var slug = this.dataset.slug;
-        fetch(SUPABASE_URL + '/rest/v1/rpc/increment_likes', {
-          method: 'POST',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ p_slug: slug })
-        }).then(function(r) { return r.text(); }).then(function(data) {
-          if (data) {
-            this.querySelector('.like-count').textContent = data;
-            this.dataset.liked = 'true';
-            this.classList.add('text-klein');
-          }
-        }.bind(this));
-      });
-    });
-  })();
-</script>

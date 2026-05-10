@@ -16,21 +16,3 @@ const { slug } = Astro.props;
     <span class="comments-count">0</span>
   </span>
 </span>
-<script>
-  (function() {
-    var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
-    var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
-    document.querySelectorAll('.stats-counter').forEach(function(c) {
-      var slug = c.getAttribute('data-slug');
-      fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug) + '&select=views,likes', {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      }).then(function(r) { return r.json(); }).then(function(data) {
-        var d = data[0];
-        if (d) {
-          c.querySelector('.views-count').textContent = d.views || 0;
-          c.querySelector('.likes-count').textContent = d.likes || 0;
-        }
-      });
-    });
-  })();
-</script>
