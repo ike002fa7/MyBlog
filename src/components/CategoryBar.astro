@@ -1,0 +1,34 @@
+<div id="category-bar" class="mb-8 flex flex-wrap items-center gap-2">
+  <button class="cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all bg-klein text-white shadow-sm shadow-klein/20" data-cat="全部">全部</button>
+  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="技术">技术</button>
+  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="工具">工具</button>
+  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="VPS">VPS</button>
+  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="AI">AI</button>
+  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="3C数码">3C数码</button>
+</div>
+
+<script>
+  (function() {
+    var btns = document.querySelectorAll('.cat-btn');
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        btns.forEach(function(b) {
+          b.className = 'cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300';
+        });
+        btn.className = 'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all bg-klein text-white shadow-sm shadow-klein/20';
+        var cat = btn.getAttribute('data-cat');
+        document.querySelectorAll('.post-card').forEach(function(card) {
+          if (cat === '全部' || card.getAttribute('data-category') === cat) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        // 更新可见文章数
+        var visible = document.querySelectorAll('.post-card[style=""]').length || document.querySelectorAll('.post-card:not([style*="display: none"])').length;
+        var countEl = document.getElementById('visible-count');
+        if (countEl) countEl.textContent = cat === '全部' ? '' : ' · ' + cat;
+      });
+    });
+  })();
+</script>

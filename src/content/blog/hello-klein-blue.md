@@ -2,7 +2,8 @@
 title: "你好，克莱因蓝"
 date: 2026-05-10
 excerpt: "这是我的第一篇博客文章。基于 Astro + GitHub Pages 搭建的极简科技风个人博客，以克莱因蓝为主色调。"
-tags: ["博客", "技术"]
+category: "技术"
+tags: ["博客", "Astro"]
 ---
 
 ## 关于这个博客
