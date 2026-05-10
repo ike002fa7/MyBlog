@@ -26,7 +26,7 @@ const { title, description, currentPath = '' } = Astro.props;
     <div id="scroll-progress" class="fixed top-0 left-0 z-50 h-0.5 bg-klein transition-[width] duration-150" style="width:0%"></div>
     <div class="flex min-h-full flex-col">
       <Header currentPath={currentPath} />
-      <main class="flex-1"><slot /></main>
+      <main class="flex-1 flex flex-col"><slot /></main>
       <Footer />
     </div>
     <!-- 暗色模式切换按钮 -->
