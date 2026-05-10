@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="关于我" description="About Me - Terminal Style" currentPath="/about">
+  <!-- 全屏克莱因蓝背景 -->
+  <div class="flex min-h-[calc(100vh-12rem)] items-center justify-center px-4 py-12" style="background: #002FA7;">
+    
+    <!-- 终端窗口 -->
+    <div class="w-full max-w-2xl rounded-2xl border border-white/20 shadow-2xl shadow-black/30 overflow-hidden">
+      
+      <!-- 终端标题栏 -->
+      <div class="flex items-center gap-2 border-b border-white/10 bg-black/20 px-5 py-3">
+        <span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
+        <span class="h-3 w-3 rounded-full bg-[#febc2e]"></span>
+        <span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
+        <span class="ml-3 font-mono text-xs text-white/50">about.sh — bash — 80×24</span>
+      </div>
+      
+      <!-- 终端内容 -->
+      <div class="px-6 py-6 font-mono text-sm leading-relaxed tracking-wide italic text-white/95" style="background: #002FA7;">
+        
+        <!-- 命令1: whoami -->
+        <div class="mb-5">
+          <span class="select-none text-[#7cb7ff]">$ </span>
+          <span class="text-white/80">whoami</span>
+        </div>
+        <div class="mb-6 ml-4 border-l-2 border-white/20 pl-4 space-y-1">
+          <p><span class="text-[#7cb7ff]">name</span>    → <span>jynight</span></p>
+          <p><span class="text-[#7cb7ff]">gender</span>  → <span>Male</span></p>
+          <p><span class="text-[#7cb7ff]">sign</span>    → <span>Sagittarius ♐</span></p>
+          <p><span class="text-[#7cb7ff]">mbti</span>    → <span>INTJ</span></p>
+          <p><span class="text-[#7cb7ff]">traits</span>  → <span>OCD · Perfectionist · Nihilist</span></p>
+        </div>
+
+        <!-- 命令2: cat bio.txt -->
+        <div class="mb-5">
+          <span class="select-none text-[#7cb7ff]">$ </span>
+          <span class="text-white/80">cat ~/bio.txt</span>
+        </div>
+        <div class="mb-6 ml-4 border-l-2 border-white/20 pl-4">
+          <p>Based on a true story.</p>
+        </div>
+
+        <!-- 命令3: cat contact.json -->
+        <div class="mb-5">
+          <span class="select-none text-[#7cb7ff]">$ </span>
+          <span class="text-white/80">cat ~/contact.json</span>
+        </div>
+        <div class="mb-4 ml-4 border-l-2 border-white/20 pl-4 space-y-1.5">
+          <p><span class="text-[#7cb7ff]">"github"</span>: <a href="https://github.com/jynight" target="_blank" class="underline underline-offset-4 decoration-white/30 hover:text-[#7cb7ff] transition-colors">"https://github.com/jynight"</a></p>
+          <p><span class="text-[#7cb7ff]">"email"</span> : <a href="mailto:nwo@live.com" class="underline underline-offset-4 decoration-white/30 hover:text-[#7cb7ff] transition-colors">"nwo@live.com"</a></p>
+          <p><span class="text-[#7cb7ff]">"phone"</span> : <span>"+1 909 666 0202"</span></p>
+        </div>
+
+        <!-- 闪烁光标 -->
+        <div>
+          <span class="select-none text-[#7cb7ff]">$ </span>
+          <span class="inline-block h-4 w-2 animate-pulse bg-white/80 align-middle"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
