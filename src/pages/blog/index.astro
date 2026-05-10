@@ -6,7 +6,7 @@ import CategoryBar from '../../components/CategoryBar.astro';
 const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.date);
 ---
 <BaseLayout title="博客" currentPath="/blog">
-  <div class="mx-auto max-w-4xl px-6 py-16 md:py-20">
+  <div class="mx-auto max-w-6xl px-6 py-16 md:py-20">
     <div class="mb-10">
       <h1 class="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">所有文章</h1>
       <div class="mt-2 flex items-center gap-3">
@@ -24,9 +24,9 @@ const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.d
         <p class="font-mono text-sm">暂无文章</p>
       </div>
     ) : (
-      <div class="space-y-6">
-        {posts.map((p, i) => (
-          <article class={`post-card group relative overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 p-6 transition-all duration-300 hover:border-klein/30 hover:shadow-lg hover:shadow-klein/5 hover:-translate-y-1 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-klein/40 dark:hover:shadow-klein/10 ${i % 2 === 1 ? 'md:ml-8' : 'md:mr-8'}`} data-category={p.data.category || '技术'}>
+      <div class="grid gap-6 md:grid-cols-2">
+        {posts.map((p) => (
+          <article class={`post-card group relative overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 p-6 transition-all duration-300 hover:border-klein/30 hover:shadow-lg hover:shadow-klein/5 hover:-translate-y-1 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-klein/40 dark:hover:shadow-klein/10`} data-category={p.data.category || '技术'}>
             <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-klein to-klein-400 opacity-0 transition-opacity group-hover:opacity-100"></div>
             <a href={`/blog/${p.slug}`} class="block">
               <div class="flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">

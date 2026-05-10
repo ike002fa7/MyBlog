@@ -9,7 +9,7 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 <BaseLayout title={post.data.title} description={post.data.excerpt} currentPath="/blog">
-  <article class="mx-auto max-w-4xl px-6 py-12 md:py-16">
+  <article class="mx-auto max-w-6xl px-6 py-12 md:py-16">
     <!-- 文章头部 -->
     <header class="mb-10">
       {post.data.tags && (
