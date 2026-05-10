@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#002FA7"/>
+  <rect x="40" y="40" width="1120" height="550" rx="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+  <!-- X logo mark -->
+  <rect x="520" y="200" width="160" height="160" rx="32" fill="white" opacity="0.15"/>
+  <text x="600" y="320" font-family="'JetBrains Mono','Inter',sans-serif" font-size="100" font-weight="800" fill="white" text-anchor="middle">X</text>
+  <!-- Brand text -->
+  <text x="600" y="440" font-family="'Microsoft YaHei','Inter',sans-serif" font-size="48" font-weight="700" fill="white" text-anchor="middle">X-ATCN</text>
+  <text x="600" y="495" font-family="'JetBrains Mono',monospace" font-size="22" fill="rgba(255,255,255,0.6)" text-anchor="middle">在 0 与 1 之间，重塑创新与自由</text>
+</svg>
