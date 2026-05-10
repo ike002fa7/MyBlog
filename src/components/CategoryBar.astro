@@ -17,15 +17,17 @@
         });
         btn.className = 'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all bg-klein text-white shadow-sm shadow-klein/20';
         var cat = btn.getAttribute('data-cat');
-        document.querySelectorAll('.post-card').forEach(function(card) {
-          if (cat === '全部' || card.getAttribute('data-category') === cat) {
+        var cards = document.querySelectorAll('.post-card');
+        var shown = 0;
+        cards.forEach(function(card) {
+          var match = cat === '全部' || card.getAttribute('data-category') === cat;
+          if (match && shown < 4) {
             card.style.display = '';
+            shown++;
           } else {
             card.style.display = 'none';
           }
         });
-        // 更新可见文章数
-        var visible = document.querySelectorAll('.post-card[style=""]').length || document.querySelectorAll('.post-card:not([style*="display: none"])').length;
         var countEl = document.getElementById('visible-count');
         if (countEl) countEl.textContent = cat === '全部' ? '' : ' · ' + cat;
       });

@@ -73,7 +73,7 @@ const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.d
     </div>
     <CategoryBar />
     <div class="grid gap-6 md:grid-cols-2">
-      {posts.slice(0,5).map((p) => (
+      {posts.map((p) => (
         <article class={`post-card group relative overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 p-6 transition-all duration-300 hover:border-klein/30 hover:shadow-lg hover:shadow-klein/5 hover:-translate-y-1 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-klein/40 dark:hover:shadow-klein/10`} data-category={p.data.category || '技术'}>
           <!-- hover 渐变条 -->
           <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-klein to-klein-400 opacity-0 transition-opacity group-hover:opacity-100"></div>
