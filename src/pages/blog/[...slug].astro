@@ -91,6 +91,12 @@ const { Content } = await post.render();
         var count = event.data.giscus.discussion.totalCommentCount;
         var cc = document.querySelector('.comments-count');
         if (cc && count != null) cc.textContent = count;
+        // 同步回 Supabase，列表页就能读取
+        fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug), {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ comments: count })
+        });
       }
     });
 
@@ -100,8 +106,7 @@ const { Content } = await post.render();
     gs.setAttribute('data-repo-id', 'R_kgDOSZJ6kg');
     gs.setAttribute('data-category', 'General');
     gs.setAttribute('data-category-id', 'DIC_kwDOSZJ6ks4C8sa_');
-    gs.setAttribute('data-mapping', 'specific');
-    gs.setAttribute('data-term', slug);
+    gs.setAttribute('data-mapping', 'pathname');
     gs.setAttribute('data-reactions-enabled', '1');
     gs.setAttribute('data-emit-metadata', '1');
     gs.setAttribute('data-input-position', 'bottom');

@@ -26,6 +26,9 @@ BEGIN
   RETURN new_likes;
 END; $$ LANGUAGE plpgsql;
 
+-- 如果 blog_stats 表已存在但缺少 comments 列，执行这句：
+ALTER TABLE blog_stats ADD COLUMN IF NOT EXISTS comments BIGINT DEFAULT 0;
+
 ALTER TABLE blog_stats ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public_read" ON blog_stats FOR SELECT USING (true);
 CREATE POLICY "public_insert" ON blog_stats FOR INSERT WITH CHECK (true);
