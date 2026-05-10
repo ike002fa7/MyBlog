@@ -21,13 +21,12 @@ const navItems = [
           return (
             <li>
               <a href={item.href} 
-                 class={`relative px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                 class={`px-3 py-2 text-sm font-bold rounded-lg transition-all
                    ${isActive 
-                     ? 'text-klein dark:text-klein-300' 
+                     ? 'bg-klein text-white shadow-sm' 
                      : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
                    }`}>
                 {item.label}
-                {isActive && <span class="absolute bottom-0 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-klein"></span>}
               </a>
             </li>
           );
@@ -52,9 +51,9 @@ const navItems = [
         return (
           <li>
             <a href={item.href} 
-               class={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors
+               class={`block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
                  ${isActive 
-                   ? 'bg-klein/10 text-klein dark:bg-klein/20 dark:text-klein-300' 
+                   ? 'bg-klein text-white' 
                    : 'text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800'
                  }`}>
               {item.label}
