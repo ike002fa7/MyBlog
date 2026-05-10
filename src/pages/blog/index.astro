@@ -16,7 +16,7 @@ const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.d
       </div>
     </div>
     <div class="mt-12">
-    <CategoryBar />
+    <CategoryBar limit={999} />
     </div>
     {posts.length === 0 ? (
       <div class="flex flex-col items-center justify-center py-20 text-gray-400 dark:text-gray-500">
