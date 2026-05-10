@@ -78,6 +78,29 @@ const { title, description, currentPath = '' } = Astro.props;
   .prose code { font-size: 0.875em; padding: 0.15em 0.4em; border-radius: 4px; }
   .prose pre code { padding: 0; }
 </style>
+<style>
+  /* 页面切换 — 初始隐藏防闪烁 */
+  body { opacity: 0; transition: opacity 0.3s ease; }
+  body.ready { opacity: 1; }
+</style>
+<script>
+  // 页面淡入
+  document.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(() => {
+      document.body.classList.add('ready');
+    });
+  });
+  // 拦截站内导航 — 淡出后跳转
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('//') || a.target === '_blank') return;
+    e.preventDefault();
+    document.body.style.opacity = '0';
+    setTimeout(() => { location.href = href; }, 250);
+  });
+</script>
 <script>
   // 暗色模式切换
   document.getElementById('theme-toggle').addEventListener('click', () => {
