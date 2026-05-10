@@ -1,7 +1,6 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { ViewTransitions } from 'astro:transitions';
 
 interface Props { title: string; description?: string; currentPath?: string; }
 const { title, description, currentPath = '' } = Astro.props;
@@ -11,8 +10,8 @@ const { title, description, currentPath = '' } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="view-transition" content="same-origin" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <ViewTransitions />
     <title>{title} | X-ATCN</title>
     <meta name="description" content={description || '极简科技风个人博客'} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -42,6 +41,12 @@ const { title, description, currentPath = '' } = Astro.props;
   ::selection { background-color: #002FA7; color: white; }
   .dark ::selection { background-color: #1A67FF; color: white; }
   html { scroll-behavior: smooth; }
+  /* View Transitions — 页面切换动画 */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: 0.25s ease-out both vt-fade-out; }
+  ::view-transition-new(root) { animation: 0.35s ease-out both vt-fade-in; }
+  @keyframes vt-fade-out { to { opacity: 0; transform: translateY(-6px); } }
+  @keyframes vt-fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   /* 统计数字加载骨架 */
   .stats-counter .views-count:empty::after,
   .stats-counter .likes-count:empty::after,
