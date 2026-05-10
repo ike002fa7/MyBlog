@@ -7,9 +7,11 @@ const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.d
 ---
 <BaseLayout title="首页" currentPath="/">
   <!-- Hero Section -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-white via-klein/3 to-klein/5 dark:from-gray-950 dark:via-klein/10 dark:to-gray-950">
+  <section class="relative overflow-hidden bg-gradient-to-br from-white via-klein/3 to-klein/5 dark:from-gray-950 dark:via-klein/10 dark:to-gray-950" id="hero-section">
+    <!-- 粒子 Canvas -->
+    <canvas id="particle-canvas" class="absolute inset-0 z-0 pointer-events-none"></canvas>
     <!-- 几何装饰 -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
       <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-klein/5 blur-3xl"></div>
       <div class="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-klein/10 blur-3xl"></div>
       <!-- 装饰线条 -->
@@ -95,3 +97,98 @@ const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.d
 </BaseLayout>
 
 <script defer src="/js/blog-stats.js"></script>
+<script defer>
+  (function() {
+    var canvas = document.getElementById('particle-canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var hero = document.getElementById('hero-section');
+    var particles = [];
+    var mouse = { x: -9999, y: -9999 };
+    var PARTICLE_COUNT = 50;
+    var CONNECT_DIST = 130;
+    var MOUSE_RADIUS = 150;
+    var isDark = document.documentElement.classList.contains('dark');
+
+    function resize() {
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // 粒子类
+    function Particle() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.radius = Math.random() * 1.5 + 0.8;
+    }
+    Particle.prototype.update = function() {
+      // 鼠标微弱吸附
+      var dx = mouse.x - this.x;
+      var dy = mouse.y - this.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < MOUSE_RADIUS && dist > 10) {
+        var force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * 0.015;
+        this.vx += dx / dist * force;
+        this.vy += dy / dist * force;
+      }
+      // 阻尼
+      this.vx *= 0.999;
+      this.vy *= 0.999;
+      // 限制速度
+      var speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+      if (speed > 0.6) { this.vx *= 0.6 / speed; this.vy *= 0.6 / speed; }
+      this.x += this.vx;
+      this.y += this.vy;
+      // 边界回弹
+      if (this.x < 0) { this.x = 0; this.vx *= -1; }
+      if (this.x > canvas.width) { this.x = canvas.width; this.vx *= -1; }
+      if (this.y < 0) { this.y = 0; this.vy *= -1; }
+      if (this.y > canvas.height) { this.y = canvas.height; this.vy *= -1; }
+    };
+
+    for (var i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+    hero.addEventListener('mousemove', function(e) {
+      var rect = hero.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    hero.addEventListener('mouseleave', function() { mouse.x = -9999; mouse.y = -9999; });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var dotColor = isDark ? 'rgba(26,103,255,0.15)' : 'rgba(0,47,167,0.12)';
+      var lineColor = isDark ? 'rgba(26,103,255,0.08)' : 'rgba(0,47,167,0.07)';
+
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.update();
+        // 画点
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = dotColor;
+        ctx.fill();
+        // 连线
+        for (var j = i + 1; j < particles.length; j++) {
+          var q = particles[j];
+          var dx = p.x - q.x, dy = p.y - q.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < CONNECT_DIST) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = lineColor;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+</script>
