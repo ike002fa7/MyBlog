@@ -21,7 +21,7 @@ const { title, description, currentPath = '' } = Astro.props;
       (function(){var s=localStorage.getItem('theme');if(s==='dark'||(!s&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})();
     </script>
   </head>
-  <body class="h-full bg-white text-gray-900 antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100">
+  <body class="h-full bg-white text-gray-900 font-sans antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100">
     <!-- 滚动进度条 -->
     <div id="scroll-progress" class="fixed top-0 left-0 z-50 h-0.5 bg-klein transition-[width] duration-150" style="width:0%"></div>
     <div class="flex min-h-full flex-col">
