@@ -88,7 +88,9 @@ const { Content } = await post.render();
     window.addEventListener('message', function(event) {
       if (!event.origin.includes('giscus')) return;
       if (event.data?.giscus?.discussion) {
-        var count = event.data.giscus.discussion.totalCommentCount;
+        var d = event.data.giscus.discussion;
+        // totalCommentCount 只含一级评论，totalReplyCount 是所有回复数
+        var count = (d.totalCommentCount || 0) + (d.totalReplyCount || 0);
         var cc = document.querySelector('.comments-count');
         if (cc && count != null) cc.textContent = count;
         // 同步回 Supabase，列表页就能读取
