@@ -22,7 +22,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 <script>
   (function() {
     var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
-    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpYWtmeHN2em10dnZmb2p0a2xuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNzU5NjksImV4cCI6MjA5Mzk1MTk2OX0.Rdg3IcgL0_GUQjtnrjswVk-MNNPaZxOhevQBBAWYM90';
+    var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
     document.querySelectorAll('.stats-counter').forEach(function(c) {
       var slug = c.getAttribute('data-slug');
       fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug) + '&select=views,likes', {
