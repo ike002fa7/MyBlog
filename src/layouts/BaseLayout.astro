@@ -40,17 +40,6 @@ const { title, description, currentPath = '' } = Astro.props;
   ::selection { background-color: #002FA7; color: white; }
   .dark ::selection { background-color: #1A67FF; color: white; }
   html { scroll-behavior: smooth; }
-  /* 统计数字加载骨架 */
-  .stats-counter .views-count:empty::after,
-  .stats-counter .likes-count:empty::after,
-  .stats-counter .comments-count:empty::after,
-  .stats-counter .views-count:not(:empty)~.skeleton,
-  .stats-counter .likes-count:not(:empty)~.skeleton { display: none; }
-  .stat-skeleton { display: inline-block; width: 1.5em; height: 1em; background: #e5e7eb; border-radius: 3px; animation: pulse 1.5s ease-in-out infinite; }
-  .dark .stat-skeleton { background: #374151; }
-  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.5 } }
-  /* 数字递增时不显示骨架 */
-  .stat-loaded .stat-skeleton { display: none !important; }
   /* 表格样式 */
   .prose table { border-radius: 12px; overflow: hidden; }
   .prose thead th { background: #f3f4f6; font-weight: 600; padding: 0.75rem 1rem; }
