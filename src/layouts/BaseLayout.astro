@@ -53,8 +53,9 @@ const { title, description, currentPath = '' } = Astro.props;
   .stat-loaded .stat-skeleton { display: none !important; }
   /* 表格样式 */
   .prose table { border-radius: 12px; overflow: hidden; }
-  .prose thead th { background: #f3f4f6; font-weight: 600; }
+  .prose thead th { background: #f3f4f6; font-weight: 600; padding: 0.75rem 1rem; }
   .dark .prose thead th { background: #1f2937; }
+  .prose tbody td { padding: 0.75rem 1rem; }
   .prose tbody tr:nth-child(even) { background: #f9fafb; }
   .dark .prose tbody tr:nth-child(even) { background: #111827; }
   /* blockquote 克莱因蓝左边框 */
