@@ -4,41 +4,91 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.date);
 ---
-<BaseLayout title="首页">
-  <div class="mx-auto max-w-4xl px-6 py-20">
-    <section class="mb-20">
-      <h1 class="text-5xl font-bold leading-tight tracking-tight text-gray-900">用<span class="text-klein">克莱因蓝</span>，<br/>记录所思所想。</h1>
-      <p class="mt-6 max-w-xl text-lg leading-relaxed text-gray-500">极简科技风个人博客。无服务器架构，GitHub Pages 托管，以纯粹的设计承载内容。</p>
-      <div class="mt-8 flex items-center gap-6">
-        <a href="/blog" class="inline-flex items-center gap-2 rounded-lg bg-klein px-5 py-2.5 text-sm font-medium text-white hover:bg-klein-600 transition-colors">浏览文章 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></a>
-        <span class="font-mono text-sm text-gray-400">{posts.length} 篇文章</span>
+<BaseLayout title="首页" currentPath="/">
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-white via-klein/3 to-klein/5 dark:from-gray-950 dark:via-klein/10 dark:to-gray-950">
+    <!-- 几何装饰 -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <div class="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-klein/5 blur-3xl"></div>
+      <div class="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-klein/10 blur-3xl"></div>
+      <!-- 装饰线条 -->
+      <svg class="absolute top-20 right-10 h-40 w-40 text-klein/10 dark:text-klein/20" fill="none" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="78" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 4"/>
+        <circle cx="80" cy="80" r="50" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <line x1="80" y1="0" x2="80" y2="160" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+        <line x1="0" y1="80" x2="160" y2="80" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+      </svg>
+      <svg class="absolute bottom-16 left-8 h-24 w-24 text-klein/15 dark:text-klein/25" fill="none" viewBox="0 0 96 96">
+        <rect x="2" y="2" width="92" height="92" rx="16" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6"/>
+        <circle cx="48" cy="48" r="8" fill="currentColor" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="mx-auto max-w-4xl px-6 py-24 md:py-32">
+      <div class="relative max-w-2xl">
+        <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-klein/20 bg-klein/5 px-4 py-1.5 text-xs font-medium text-klein dark:border-klein/30 dark:bg-klein/10 dark:text-klein-300">
+          <span class="relative flex h-2 w-2">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-klein opacity-75"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-klein"></span>
+          </span>
+          Serverless Blog
+        </div>
+        <h1 class="text-5xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-6xl dark:text-white">
+          用<span class="bg-gradient-to-r from-klein to-klein-400 bg-clip-text text-transparent">克莱因蓝</span><br/>记录所思所想
+        </h1>
+        <p class="mt-6 max-w-lg text-lg leading-relaxed text-gray-500 dark:text-gray-400">
+          极简科技风个人博客。无服务器架构，GitHub Pages 托管，以纯粹的设计承载内容。
+        </p>
+        <div class="mt-10 flex flex-wrap items-center gap-4">
+          <a href="/blog" class="inline-flex items-center gap-2 rounded-xl bg-klein px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-klein/25 transition-all hover:bg-klein-600 hover:shadow-klein/40 hover:-translate-y-0.5 dark:shadow-klein/40">
+            浏览文章
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </a>
+          <span class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-5 py-3 font-mono text-sm text-gray-400 dark:border-gray-700 dark:text-gray-500">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+            {posts.length} 篇文章
+          </span>
+        </div>
       </div>
-    </section>
-    <section>
-      <h2 class="mb-8 font-mono text-sm font-medium uppercase tracking-wider text-gray-400">最新文章</h2>
-      <div class="divide-y divide-gray-100">
-        {posts.slice(0,5).map((p) => (
-          <article class="group border-b border-gray-100 py-8 last:border-b-0">
-            <a href={`/blog/${p.slug}`} class="block">
-              <div class="flex items-baseline justify-between gap-4">
-                <h2 class="text-lg font-semibold text-gray-900 group-hover:text-klein transition-colors">{p.data.title}</h2>
-                <time class="shrink-0 font-mono text-xs text-gray-400">{p.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}</time>
-              </div>
-              {p.data.excerpt && <p class="mt-2 text-sm leading-relaxed text-gray-500 line-clamp-2">{p.data.excerpt}</p>}
-            </a>
-            <div class="mt-3 flex items-center gap-4">
-              <span class="stats-counter inline-flex items-center gap-4 font-mono text-xs text-gray-400" data-slug={p.slug}>
-                <span class="inline-flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="views-count">0</span></span>
-                <span class="inline-flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg><span class="likes-count">0</span></span>
-                <span class="inline-flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/></svg><span class="comments-count">0</span></span>
-              </span>
-              {p.data.tags && p.data.tags.map((tag) => (<span class="rounded-full bg-gray-100 px-2.5 py-0.5 font-mono text-xs text-gray-500">#{tag}</span>))}
+    </div>
+  </section>
+
+  <!-- 文章列表 -->
+  <section class="mx-auto max-w-4xl px-6 py-20">
+    <div class="mb-10 flex items-center gap-3">
+      <h2 class="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">最新文章</h2>
+      <div class="h-px flex-1 bg-gradient-to-r from-gray-200 to-transparent dark:from-gray-700"></div>
+    </div>
+    <div class="space-y-6">
+      {posts.slice(0,5).map((p, i) => (
+        <article class={`group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 transition-all duration-300 hover:border-klein/30 hover:shadow-lg hover:shadow-klein/5 hover:-translate-y-1 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-klein/40 dark:hover:shadow-klein/10 ${i % 2 === 1 ? 'md:ml-8' : 'md:mr-8'}`}>
+          <!-- hover 渐变条 -->
+          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-klein to-klein-400 opacity-0 transition-opacity group-hover:opacity-100"></div>
+          <a href={`/blog/${p.slug}`} class="block">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
+              <h3 class="text-lg font-semibold text-gray-900 transition-colors group-hover:text-klein dark:text-white dark:group-hover:text-klein-300">{p.data.title}</h3>
+              <time class="shrink-0 font-mono text-xs text-gray-400 dark:text-gray-500">{p.data.date.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}</time>
             </div>
-          </article>
-        ))}
+            {p.data.excerpt && <p class="mt-2 text-sm leading-relaxed text-gray-500 line-clamp-2 dark:text-gray-400">{p.data.excerpt}</p>}
+          </a>
+          <div class="mt-4 flex flex-wrap items-center gap-3">
+            <span class="stats-counter inline-flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500" data-slug={p.slug}>
+              <span class="inline-flex items-center gap-1 font-mono"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="views-count">--</span></span>
+              <span class="inline-flex items-center gap-1 font-mono"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg><span class="likes-count">--</span></span>
+              <span class="inline-flex items-center gap-1 font-mono"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"/></svg><span class="comments-count">--</span></span>
+            </span>
+            {p.data.tags && p.data.tags.map((tag) => (<span class="rounded-full bg-gray-100 px-2.5 py-0.5 font-mono text-[10px] text-gray-500 dark:bg-gray-800 dark:text-gray-400">#{tag}</span>))}
+          </div>
+        </article>
+      ))}
+    </div>
+    {posts.length > 5 && (
+      <div class="mt-10 text-center">
+        <a href="/blog" class="inline-flex items-center gap-1 text-sm font-medium text-klein hover:text-klein-600 transition-colors dark:text-klein-300 dark:hover:text-klein-200">
+          查看全部 {posts.length} 篇文章 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
       </div>
-    </section>
-  </div>
+    )}
+  </section>
 </BaseLayout>
 
 <script defer src="/js/blog-stats.js"></script>

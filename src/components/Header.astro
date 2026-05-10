@@ -1,16 +1,71 @@
 ---
+interface Props { currentPath?: string; }
+const { currentPath = '' } = Astro.props;
 const navItems = [
   { label: '首页', href: '/' },
   { label: '博客', href: '/blog' },
 ];
 ---
-<header class="border-b border-gray-100">
-  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-5">
-    <a href="/" class="text-xl font-bold tracking-tight text-klein hover:text-klein-400 transition-colors">MyBlog</a>
-    <ul class="flex gap-8">
-      {navItems.map((item) => (
-        <li><a href={item.href} class="text-sm font-medium text-gray-500 hover:text-klein transition-colors">{item.label}</a></li>
-      ))}
+<header class="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md transition-colors dark:border-gray-800 dark:bg-gray-950/80" id="site-header">
+  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+    <a href="/" class="group flex items-center gap-2 text-xl font-bold tracking-tight">
+      <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-klein text-sm font-bold text-white transition-transform group-hover:scale-110">M</span>
+      <span class="text-gray-900 transition-colors dark:text-white">MyBlog</span>
+    </a>
+    <!-- 桌面导航 -->
+    <ul class="hidden gap-1 md:flex">
+      {navItems.map((item) => {
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+        return (
+          <li>
+            <a href={item.href} 
+               class={`relative px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                 ${isActive 
+                   ? 'text-klein dark:text-klein-300' 
+                   : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+                 }`}>
+              {item.label}
+              {isActive && <span class="absolute bottom-0 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-klein"></span>}
+            </a>
+          </li>
+        );
+      })}
     </ul>
+    <!-- 移动端汉堡按钮 -->
+    <button id="menu-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800" aria-label="菜单">
+      <svg id="menu-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg id="menu-close" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
   </nav>
+  <!-- 移动端菜单面板 -->
+  <div id="mobile-menu" class="hidden border-t border-gray-100 bg-white px-6 pb-4 pt-2 md:hidden dark:border-gray-800 dark:bg-gray-950">
+    <ul class="flex flex-col gap-1">
+      {navItems.map((item) => {
+        const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+        return (
+          <li>
+            <a href={item.href} 
+               class={`block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors
+                 ${isActive 
+                   ? 'bg-klein/10 text-klein dark:bg-klein/20 dark:text-klein-300' 
+                   : 'text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800'
+                 }`}>
+              {item.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
 </header>
+
+<script>
+  document.getElementById('menu-toggle').addEventListener('click', () => {
+    const menu = document.getElementById('mobile-menu');
+    const open = document.getElementById('menu-open');
+    const close = document.getElementById('menu-close');
+    menu.classList.toggle('hidden');
+    open.classList.toggle('hidden');
+    close.classList.toggle('hidden');
+  });
+</script>

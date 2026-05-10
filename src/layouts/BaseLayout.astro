@@ -2,8 +2,8 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-interface Props { title: string; description?: string; }
-const { title, description } = Astro.props;
+interface Props { title: string; description?: string; currentPath?: string; }
+const { title, description, currentPath = '' } = Astro.props;
 ---
 <!doctype html>
 <html lang="zh-CN" class="h-full">
@@ -15,16 +15,81 @@ const { title, description } = Astro.props;
     <meta name="description" content={description || '极简科技风个人博客'} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <!-- 暗色模式防闪烁 -->
+    <script is:inline>
+      (function(){var s=localStorage.getItem('theme');if(s==='dark'||(!s&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})();
+    </script>
   </head>
-  <body class="h-full bg-white text-gray-900 antialiased">
+  <body class="h-full bg-white text-gray-900 antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100">
+    <!-- 滚动进度条 -->
+    <div id="scroll-progress" class="fixed top-0 left-0 z-50 h-0.5 bg-klein transition-[width] duration-150" style="width:0%"></div>
     <div class="flex min-h-full flex-col">
-      <Header />
+      <Header currentPath={currentPath} />
       <main class="flex-1"><slot /></main>
       <Footer />
     </div>
+    <!-- 暗色模式切换按钮 -->
+    <button id="theme-toggle" class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 shadow-lg backdrop-blur transition-all hover:scale-110 dark:border-gray-700 dark:bg-gray-800/80" aria-label="切换主题">
+      <svg id="sun-icon" class="h-5 w-5 text-amber-500 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      <svg id="moon-icon" class="h-5 w-5 text-gray-700 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+    </button>
   </body>
 </html>
 <style is:global>
   ::selection { background-color: #002FA7; color: white; }
+  .dark ::selection { background-color: #1A67FF; color: white; }
+  html { scroll-behavior: smooth; }
+  /* 统计数字加载骨架 */
+  .stats-counter .views-count:empty::after,
+  .stats-counter .likes-count:empty::after,
+  .stats-counter .comments-count:empty::after,
+  .stats-counter .views-count:not(:empty)~.skeleton,
+  .stats-counter .likes-count:not(:empty)~.skeleton { display: none; }
+  .stat-skeleton { display: inline-block; width: 1.5em; height: 1em; background: #e5e7eb; border-radius: 3px; animation: pulse 1.5s ease-in-out infinite; }
+  .dark .stat-skeleton { background: #374151; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.5 } }
+  /* 数字递增时不显示骨架 */
+  .stat-loaded .stat-skeleton { display: none !important; }
+  /* 表格样式 */
+  .prose table { border-radius: 12px; overflow: hidden; }
+  .prose thead th { background: #f3f4f6; font-weight: 600; }
+  .dark .prose thead th { background: #1f2937; }
+  .prose tbody tr:nth-child(even) { background: #f9fafb; }
+  .dark .prose tbody tr:nth-child(even) { background: #111827; }
+  /* blockquote 克莱因蓝左边框 */
+  .prose blockquote { border-left-color: #002FA7 !important; background: #f0f4ff; border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; }
+  .dark .prose blockquote { background: #1e2235; border-left-color: #1A67FF !important; }
+  /* 代码块 */
+  .prose pre { position: relative; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+  .dark .prose pre { box-shadow: 0 4px 24px rgba(0,0,0,.3); }
+  /* 字体阶梯 */
+  .prose h1 { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.025em; }
+  .prose h2 { font-size: 1.625rem; font-weight: 700; letter-spacing: -0.015em; margin-top: 2.5rem; }
+  .prose h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; }
+  .prose p { line-height: 1.85; }
+  .prose code { font-size: 0.875em; padding: 0.15em 0.4em; border-radius: 4px; }
+  .prose pre code { padding: 0; }
 </style>
+<script>
+  // 暗色模式切换
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    // 同步 Giscus 主题
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      iframe.contentWindow.postMessage({
+        giscus: { setConfig: { theme: html.classList.contains('dark') ? 'dark' : 'light' } }
+      }, 'https://giscus.app');
+    }
+  });
+  // 滚动进度条
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    document.getElementById('scroll-progress').style.width = progress + '%';
+  });
+</script>
