@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const posts = (await getCollection('blog')).sort((a,b) => b.data.date - a.data.date);
+---
+<BaseLayout title="首页">
+  <div class="mx-auto max-w-4xl px-6 py-20">
+    <section class="mb-20">
+      <h1 class="text-5xl font-bold leading-tight tracking-tight text-gray-900">用<span class="text-klein">克莱因蓝</span>，<br/>记录所思所想。</h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-gray-500">极简科技风个人博客。无服务器架构，GitHub Pages 托管，以纯粹的设计承载内容。</p>
+      <div class="mt-8 flex items-center gap-6">
+        <a href="/blog" class="inline-flex items-center gap-2 rounded-lg bg-klein px-5 py-2.5 text-sm font-medium text-white hover:bg-klein-600 transition-colors">浏览文章 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></a>
+        <span class="font-mono text-sm text-gray-400">{posts.length} 篇文章</span>
+      </div>
+    </section>
+    <section>
+      <h2 class="mb-8 font-mono text-sm font-medium uppercase tracking-wider text-gray-400">最新文章</h2>
+      {posts.slice(0,5).map((p) => <PostCard title={p.data.title} date={p.data.date} slug={p.slug} excerpt={p.data.excerpt} tags={p.data.tags} />)}
+    </section>
+  </div>
+</BaseLayout>
