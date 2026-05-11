@@ -6,7 +6,7 @@ User-agent: *
 Allow: /
 
 # Point to sitemaps
-Sitemap: https://x-atcn.top/sitemap-index.xml
+Sitemap: https://www.x-atcn.top/sitemap.xml
 
 # Crawl-delay (be nice to the server)
 Crawl-delay: 10
