@@ -2,7 +2,7 @@
 title: "Hermes Agent 在 WSL 中的部署与配置指南"
 date: 2026-05-10
 excerpt: "在 WSL2 中从零部署 Nous Research 的 Hermes Agent，接入 QQ Bot 实现智能对话"
-category: "AI"
+category: "nod"
 tags: ["AI", "WSL", "Hermes Agent", "部署", "QQ Bot"]
 ---
 

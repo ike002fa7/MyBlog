@@ -2,7 +2,7 @@
 title: "Lisahost 丽萨主机美国 VPS 测评：性价比之选"
 date: 2026-05-10
 excerpt: "Lisahost 美国双 ISP 住宅 IP VPS 全面测评，含价格、网络质量、benchmark 数据与竞品对比。"
-category: "VPS"
+category: "nod"
 tags: ["VPS", "Lisahost", "美国VPS", "住宅IP"]
 ---
 

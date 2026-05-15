@@ -2,7 +2,7 @@
 title: "AI Coding Agent 工作流：从 Prompt 到生产的自动化实践"
 date: 2026-05-10
 excerpt: "对比 Claude Code、Codex CLI、OpenCode 三大 AI 编程智能体，深入解析自主编码模式与多智能体协作技巧。"
-category: "技术"
+category: "nod"
 tags: ["AI", "编程", "Agent", "自动化"]
 ---
 

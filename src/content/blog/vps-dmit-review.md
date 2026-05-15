@@ -2,7 +2,7 @@
 title: "DMIT 美国 VPS 深度测评：CN2 GIA 线路实测"
 date: 2026-05-10
 excerpt: "DMIT 美国洛杉矶 CN2 GIA VPS 全面测评，含套餐价格、延迟速度测试、流媒体解锁与购买建议。"
-category: "VPS"
+category: "nod"
 tags: ["VPS", "DMIT", "CN2 GIA", "美国VPS"]
 ---
 

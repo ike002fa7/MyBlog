@@ -2,7 +2,7 @@
 title: "Windsurf：Codeium 出品的 AI IDE 深度体验"
 date: 2026-05-10
 excerpt: "深度体验 Codeium 推出的 Windsurf IDE，解析 Cascade AI agent 的核心能力、与 Cursor/Copilot 的差异，以及实际开发场景中的真实表现。"
-category: "工具"
+category: "wrk"
 tags: ["效率"]
 ---
 

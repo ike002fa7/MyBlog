@@ -2,7 +2,7 @@
 title: "Cursor Rules：用规则驱动 AI 编码的最佳实践"
 date: 2026-05-10
 excerpt: "深入解析 Cursor Rules 机制，从基础配置到高级规则模板，让你的 AI 编程助手真正理解项目上下文。"
-category: "技术"
+category: "nod"
 tags: ["AI", "编程", "Cursor", "效率"]
 ---
 

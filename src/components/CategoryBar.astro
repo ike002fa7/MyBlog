@@ -1,14 +1,30 @@
 ---
 interface Props { limit?: number; }
 const { limit = 4 } = Astro.props;
+
+// 分类配置：slug → 显示名（中文名 / 英文缩写）
+const categories = [
+  { slug: '全部', label: '全部' },
+  { slug: 'nod', label: '节点 / nod' },
+  { slug: 'ter', label: '终端 / ter' },
+  { slug: 'wrk', label: '工作台 / wrk' },
+  { slug: 'ker', label: '内核 / ker' },
+  { slug: 'ovf', label: '溢出 / ovf' },
+];
 ---
+
 <div id="category-bar" class="mb-8 flex flex-wrap items-center gap-2" data-limit={String(limit)}>
-  <button class="cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all bg-klein text-white shadow-sm shadow-klein/20" data-cat="全部">全部</button>
-  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="技术">技术</button>
-  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="工具">工具</button>
-  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="VPS">VPS</button>
-  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="AI">AI</button>
-  <button class="cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-cat="3C数码">3C数码</button>
+  {categories.map((cat, i) => (
+    <button
+      class:list={[
+        'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all',
+        i === 0
+          ? 'bg-klein text-white shadow-sm shadow-klein/20'
+          : 'border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300'
+      ]}
+      data-cat={cat.slug}
+    >{cat.label}</button>
+  ))}
 </div>
 
 <script>

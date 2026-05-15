@@ -121,8 +121,8 @@ const navItems = [
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
     });
 
-    var categories = ['技术','工具','VPS','AI','3C数码'];
-    var catColors = { '技术':'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', '工具':'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', 'VPS':'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300', 'AI':'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300', '3C数码':'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' };
+    var categories = ['节点','终端','工作台','内核','溢出'];
+    var catColors = { 'nod':'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300', 'ter':'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300', 'wrk':'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', 'ker':'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', 'ovf':'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' };
 
     input.addEventListener('input', function() {
       var q = this.value.trim().toLowerCase();

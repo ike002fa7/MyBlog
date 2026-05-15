@@ -2,7 +2,7 @@
 title: "Anker 2026上半年热门产品盘点与实测"
 date: 2026-05-10
 excerpt: "全面盘点Anker 2026上半年热门产品，涵盖Prime充电宝、GaN充电器、Soundcore音频和Work会议设备，附实测数据与购买建议。"
-category: "3C数码"
+category: "ter"
 tags: ["3C", "测评", "Anker", "充电", "音频"]
 ---
 

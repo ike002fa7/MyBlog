@@ -6,7 +6,7 @@ export async function GET() {
     title: p.data.title,
     slug: p.slug,
     excerpt: p.data.excerpt || '',
-    category: p.data.category || '技术',
+    category: p.data.category || 'ovf',
     tags: p.data.tags || [],
     date: p.data.date.toISOString(),
   }));

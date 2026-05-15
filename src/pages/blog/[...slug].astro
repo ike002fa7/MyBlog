@@ -2,6 +2,15 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
+// 分类中文名映射
+const catLabel = {
+  'nod': '节点',
+  'ter': '终端',
+  'wrk': '工作台',
+  'ker': '内核',
+  'ovf': '溢出',
+};
+
 export async function getStaticPaths() {
   return (await getCollection('blog')).map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
 }
@@ -54,7 +63,8 @@ const jsonLd = {
     <!-- 文章头部 -->
     <header class="mb-10">
       {post.data.tags && (
-        <div class="mb-5 flex flex-wrap gap-2">
+        <div class="mb-5 flex flex-wrap gap-2 items-center">
+          <span class="rounded-full bg-klein/10 px-3 py-1 font-mono text-xs font-medium text-klein border border-klein/20 dark:bg-klein/20 dark:border-klein/40 dark:text-klein-300">{catLabel[post.data.category] || '溢出'}</span>
           {post.data.tags.map((t) => <span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300">#{t}</span>)}
         </div>
       )}

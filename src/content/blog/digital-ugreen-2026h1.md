@@ -2,7 +2,7 @@
 title: "绿联 UGREEN 2026上半年热门产品盘点与实测"
 date: 2026-05-10
 excerpt: "深度盘点绿联2026上半年热门产品，涵盖NASync NAS、GaN充电器、扩展坞和雷电/USB4线材，附竞品对比与购买建议。"
-category: "3C数码"
+category: "ter"
 tags: ["3C", "测评", "绿联", "NAS", "充电"]
 ---
 

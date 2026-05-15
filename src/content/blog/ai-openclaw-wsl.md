@@ -2,7 +2,7 @@
 title: "OpenClaw 在 WSL 中的部署与配置指南"
 date: 2026-05-10
 excerpt: "在 WSL2 中快速部署 OpenClaw 个人 AI 助手，实现多平台消息接入与智能对话"
-category: "AI"
+category: "nod"
 tags: ["AI", "WSL", "OpenClaw", "部署", "Bot"]
 ---
 

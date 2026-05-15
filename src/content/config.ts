@@ -5,7 +5,7 @@ const blog = defineCollection({
     title: z.string(),
     date: z.date(),
     excerpt: z.string().optional(),
-    category: z.enum(['技术', '工具', 'VPS', 'AI', '3C数码']).optional().default('技术'),
+    category: z.enum(['nod', 'ter', 'wrk', 'ker', 'ovf']).optional().default('ovf'),
     tags: z.array(z.string()).optional(),
   }),
 });

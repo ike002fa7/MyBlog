@@ -2,7 +2,7 @@
 title: "Raycast：Mac 效率工具的终极形态"
 date: 2026-05-10
 excerpt: "从启动器到效率平台，全面解析 Raycast 的扩展生态、剪贴板历史、窗口管理、AI 功能，以及与 Alfred 的深度对比。"
-category: "工具"
+category: "wrk"
 tags: ["效率"]
 ---
 
