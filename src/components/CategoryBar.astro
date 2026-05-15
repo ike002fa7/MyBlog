@@ -4,7 +4,7 @@ const { limit = 4 } = Astro.props;
 
 // 分类配置：slug → 显示名（中文名 / 英文缩写）
 const categories = [
-  { slug: '全部', label: '全部' },
+  { slug: '全部', label: '全部 / all' },
   { slug: 'nod', label: '节点 / nod' },
   { slug: 'ter', label: '终端 / ter' },
   { slug: 'wrk', label: '工作台 / wrk' },
@@ -32,6 +32,7 @@ const categories = [
     var bar = document.getElementById('category-bar');
     var limit = parseInt(bar.getAttribute('data-limit')) || 4;
     var btns = document.querySelectorAll('.cat-btn');
+    var container = bar.parentElement;
 
     function filterPosts(cat) {
       var cards = document.querySelectorAll('.post-card');
@@ -45,16 +46,36 @@ const categories = [
           card.style.display = 'none';
         }
       });
+      // 无文章提示
+      var noMsg = document.getElementById('no-posts-msg');
+      if (noMsg) {
+        noMsg.style.display = shown === 0 ? '' : 'none';
+      }
+      // 当文章数少于2时仍保留2列宽度（不改变布局）
+      var grid = document.querySelector('.grid');
+      if (grid && shown === 1) {
+        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        // 把唯一的卡片放到左边
+        cards.forEach(function(c) {
+          if (c.style.display !== 'none') {
+            c.style.gridColumn = '1';
+          }
+        });
+      } else if (grid) {
+        grid.style.gridTemplateColumns = '';
+        cards.forEach(function(c) { c.style.gridColumn = ''; });
+      }
       var countEl = document.getElementById('visible-count');
       if (countEl) countEl.textContent = cat === '全部' ? '' : ' · ' + cat;
     }
 
+    var activeClass = 'bg-klein text-white shadow-sm shadow-klein/20';
+    var inactiveClass = 'cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300';
+
     btns.forEach(function(btn) {
       btn.addEventListener('click', function() {
-        btns.forEach(function(b) {
-          b.className = 'cat-btn rounded-full border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300';
-        });
-        btn.className = 'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all bg-klein text-white shadow-sm shadow-klein/20';
+        btns.forEach(function(b) { b.className = inactiveClass; });
+        btn.className = 'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all ' + activeClass;
         filterPosts(btn.getAttribute('data-cat'));
       });
     });
