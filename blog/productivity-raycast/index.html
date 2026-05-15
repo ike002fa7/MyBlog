@@ -1,0 +1,490 @@
+<!DOCTYPE html><html lang="zh-CN" class="h-full"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><!-- Baidu Site Verification --><meta name="baidu-site-verification" content="codeva-mapRKQ9fRa"><!-- Primary Meta --><title>Raycast：Mac 效率工具的终极形态 | X-ATCN</title><meta name="description" content="从启动器到效率平台，全面解析 Raycast 的扩展生态、剪贴板历史、窗口管理、AI 功能，以及与 Alfred 的深度对比。"><meta name="author" content="Ike Bullen"><link rel="canonical" href="https://www.x-atcn.top/blog/productivity-raycast"><!-- Open Graph / Facebook --><meta property="og:type" content="article"><meta property="og:title" content="Raycast：Mac 效率工具的终极形态 | X-ATCN"><meta property="og:description" content="从启动器到效率平台，全面解析 Raycast 的扩展生态、剪贴板历史、窗口管理、AI 功能，以及与 Alfred 的深度对比。"><meta property="og:url" content="https://www.x-atcn.top/blog/productivity-raycast"><meta property="og:site_name" content="X-ATCN"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://www.x-atcn.top/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="article:published_time" content="2026-05-10T00:00:00.000Z"><meta property="article:author" content="Ike Bullen"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Raycast：Mac 效率工具的终极形态 | X-ATCN"><meta name="twitter:description" content="从启动器到效率平台，全面解析 Raycast 的扩展生态、剪贴板历史、窗口管理、AI 功能，以及与 Alfred 的深度对比。"><meta name="twitter:image" content="https://www.x-atcn.top/og-default.png"><!-- DNS Preconnect --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><!-- 暗色模式防闪烁 --><script>
+      (function(){var s=localStorage.getItem('theme');if(s==='dark'||(!s&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})();
+    </script><!-- 页面级 head 注入（JSON-LD 等） --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Raycast：Mac 效率工具的终极形态","description":"从启动器到效率平台，全面解析 Raycast 的扩展生态、剪贴板历史、窗口管理、AI 功能，以及与 Alfred 的深度对比。","datePublished":"2026-05-10T00:00:00.000Z","dateModified":"2026-05-10T00:00:00.000Z","author":{"@type":"Person","name":"Ike Bullen","url":"https://www.x-atcn.top/about"},"publisher":{"@type":"Organization","name":"X-ATCN","logo":{"@type":"ImageObject","url":"https://www.x-atcn.top/favicon.svg"}},"url":"https://www.x-atcn.top/blog/productivity-raycast","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.x-atcn.top/blog/productivity-raycast"},"keywords":"效率"}</script> <meta name="keywords" content="效率"><link rel="stylesheet" href="/_astro/about.D7_znXTo.css">
+<style>.liked[data-astro-cid-7jjqptxk] .heart-outline[data-astro-cid-7jjqptxk]{opacity:0}.liked[data-astro-cid-7jjqptxk] .heart-filled[data-astro-cid-7jjqptxk]{transform:scale(1);opacity:1}.prose[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk]{position:relative}.prose[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk]:hover .copy-btn[data-astro-cid-7jjqptxk]{opacity:1}.copy-btn[data-astro-cid-7jjqptxk]{position:absolute;top:8px;right:8px;padding:4px 10px;font-size:11px;font-family:JetBrains Mono,monospace;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#9ca3af;cursor:pointer;opacity:0;transition:opacity .2s}.copy-btn[data-astro-cid-7jjqptxk]:hover{background:#374151;color:#f3f4f6}.copy-btn[data-astro-cid-7jjqptxk].copied{color:#34d399;border-color:#34d399}
+</style><script type="module" src="/_astro/hoisted.CwcBXsj9.js"></script></head> <body class="h-full bg-white text-gray-900 font-sans antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100"> <!-- 滚动进度条 --> <div id="scroll-progress" class="fixed top-0 left-0 z-50 h-0.5 bg-klein transition-[width] duration-150" style="width:0%"></div> <div class="flex min-h-full flex-col"> <header class="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md transition-colors dark:border-gray-800 dark:bg-gray-950/80" id="site-header"> <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"> <a href="/" class="group flex items-center gap-2 text-xl font-bold tracking-tight"> <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-klein text-sm font-bold text-white transition-transform group-hover:scale-110">X</span> <span class="text-gray-900 transition-colors dark:text-white">X-ATCN</span> </a> <div class="flex items-center gap-2"> <!-- 桌面导航 --> <ul class="hidden gap-1 md:flex"> <li> <a href="/" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"> 首页 </a> </li><li> <a href="/blog" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   bg-klein text-white shadow-sm"> 博客 </a> </li><li> <a href="/about" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"> 关于我 </a> </li> </ul> <!-- 搜索按钮 --> <button id="search-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800" aria-label="搜索" title="搜索 (Ctrl+K)"> <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> </button> <!-- 移动端汉堡按钮 --> <button id="menu-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800" aria-label="菜单"> <svg id="menu-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg> <svg id="menu-close" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> </button> </div> </nav> <!-- 移动端菜单面板 --> <div id="mobile-menu" class="hidden border-t border-gray-100 bg-white px-6 pb-4 pt-2 md:hidden dark:border-gray-800 dark:bg-gray-950"> <ul class="flex flex-col gap-1"> <li> <a href="/" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"> 首页 </a> </li><li> <a href="/blog" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 bg-klein text-white"> 博客 </a> </li><li> <a href="/about" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"> 关于我 </a> </li> </ul> </div> </header> <!-- 搜索弹窗 --> <div id="search-overlay" class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 pt-[15vh] backdrop-blur-sm"> <div class="mx-4 w-full max-w-xl rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900"> <div class="flex items-center border-b border-gray-100 px-4 dark:border-gray-700"> <svg class="h-5 w-5 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> <input id="search-input" type="text" placeholder="搜索文章…" class="w-full bg-transparent px-3 py-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500" autofocus> <kbd class="hidden rounded border border-gray-200 px-1.5 py-0.5 font-mono text-[10px] text-gray-400 sm:inline-block dark:border-gray-600">Esc</kbd> </div> <div id="search-results" class="max-h-72 overflow-y-auto p-2"> <p class="px-3 py-6 text-center text-sm text-gray-400">输入关键词搜索文章标题和摘要</p> </div> </div> </div>  <main class="flex-1 flex flex-col">  <article class="mx-auto w-full max-w-6xl px-6 py-12 md:py-16" data-astro-cid-7jjqptxk> <!-- 文章头部 --> <header class="mb-10" data-astro-cid-7jjqptxk> <div class="mb-5 flex flex-wrap gap-2 items-center" data-astro-cid-7jjqptxk> <span class="rounded-full bg-klein/10 px-3 py-1 font-mono text-xs font-medium text-klein border border-klein/20 dark:bg-klein/20 dark:border-klein/40 dark:text-klein-300" data-astro-cid-7jjqptxk>工作台</span> <span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#效率</span> </div> <h1 class="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-5xl dark:text-white" data-astro-cid-7jjqptxk>Raycast：Mac 效率工具的终极形态</h1> <div class="mt-6 flex flex-wrap items-center gap-4" data-astro-cid-7jjqptxk> <time class="inline-flex items-center gap-2 font-mono text-sm text-gray-400 dark:text-gray-500" data-astro-cid-7jjqptxk> <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" data-astro-cid-7jjqptxk></path></svg> 2026年5月10日 </time> <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" data-astro-cid-7jjqptxk></span> <span class="stats-counter inline-flex items-center gap-3 font-mono text-xs text-gray-400 dark:text-gray-500" data-slug="productivity-raycast" data-astro-cid-7jjqptxk> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" data-astro-cid-7jjqptxk></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" data-astro-cid-7jjqptxk></path></svg><span class="views-count" data-astro-cid-7jjqptxk>--</span></span> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg><span class="likes-count" data-astro-cid-7jjqptxk>--</span></span> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" data-astro-cid-7jjqptxk></path></svg><span class="comments-count" data-astro-cid-7jjqptxk>--</span></span> </span> </div> </header> <!-- 文章正文 --> <div class="prose prose-lg prose-gray max-w-none dark:prose-invert" data-astro-cid-7jjqptxk> <h2 id="从-spotlight-替代品到效率中枢">从 Spotlight 替代品到效率中枢</h2>
+<p>每个 Mac 用户都经历过这个阶段：用 Spotlight（<code>Cmd+Space</code>）搜索文件、启动应用，然后发现它能做的事情太少了。于是你找到了 Alfred，用 Workflow 实现了各种自动化，觉得已经足够好了。</p>
+<p>直到你遇到 <strong>Raycast</strong>。</p>
+<p>Raycast 最早也是以「更好的 Spotlight」的定位出现，但如今它早已超越了启动器的范畴。它是一个<strong>效率中枢平台</strong>——集应用启动、剪贴板管理、窗口管理、代码片段、AI 对话、快捷搜索于一体，通过一个统一的命令面板完成几乎所有操作。</p>
+<p>用了三年 Raycast 后，我的结论是：<strong>它是 Mac 上为数不多真正改变了工作方式的应用</strong>。</p>
+<h2 id="核心功能深度解析">核心功能深度解析</h2>
+<h3 id="1-命令面板一切操作的入口">1. 命令面板：一切操作的入口</h3>
+<p>按 <code>Option+Space</code>（我的自定义快捷键），一个简洁的悬浮输入框出现。从这里你可以：</p>
+<ul>
+<li>启动任意应用：输入 <code>Chrome</code> 直接回车</li>
+<li>计算器：输入 <code>(1024 * 3) / 7</code> 直接得到结果，按回车自动复制</li>
+<li>文件搜索：输入文件名直接定位</li>
+<li>系统命令：锁屏、清空废纸篓、切换暗色模式、管理蓝牙设备</li>
+<li>搜索菜单栏项目：输入「暗色」自动找到系统设置中的相关选项</li>
+</ul>
+<p>关键是，所有这些操作<strong>不需要切换上下文</strong>——一个输入框解决一切。这种「无摩擦」的体验，用习惯后就再也回不去了。</p>
+<h3 id="2-剪贴板历史你的第二大脑">2. 剪贴板历史：你的第二大脑</h3>
+<p>macOS 原生不支持剪贴板历史，这是我认为 Raycast 最实用的内置功能。</p>
+<ul>
+<li>自动记录所有复制过的文本、图片、文件路径</li>
+<li>按 <code>Cmd+Shift+V</code> 调出历史面板，搜索关键词快速定位</li>
+<li>支持排除特定应用的复制记录（比如 1Password）</li>
+<li>可以固定常用片段，或一键将历史记录保存为 Snippet</li>
+</ul>
+<p>实际使用中，我最常用的是「三天前复制过的那段 SQL 查询」——搜索几个关键词就找回来了，比翻聊天记录快 10 倍。</p>
+<h3 id="3-窗口管理告别鼠标拖拽">3. 窗口管理：告别鼠标拖拽</h3>
+<p>Raycast 内置的窗口管理让我彻底卸载了 Magnet 和 Rectangle：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>快捷键</th><th>功能</th></tr></thead><tbody><tr><td><code>Option+Ctrl+←</code></td><td>窗口占左半屏</td></tr><tr><td><code>Option+Ctrl+→</code></td><td>窗口占右半屏</td></tr><tr><td><code>Option+Ctrl+↑</code></td><td>窗口最大化</td></tr><tr><td><code>Option+Ctrl+F</code></td><td>窗口全屏</td></tr><tr><td><code>Option+Ctrl+1/2/3/4</code></td><td>窗口占四分之一屏（角落）</td></tr></tbody></table>
+<p>在超宽屏幕上，四分之一屏的布局简直是效率神器——左侧编辑器、右侧浏览器、左下终端、右下开发文档，完全不用碰鼠标。</p>
+<h3 id="4-snippets重复输入的终结者">4. Snippets：重复输入的终结者</h3>
+<p>Snippets 让你创建可自动展开的文本模板。输入关键词后，Raycast 自动替换为完整内容。</p>
+<p>我日常使用的 Snippets 示例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>;email → 我的邮箱地址</span></span>
+<span class="line"><span>;date → 2026-05-10（自动插入当天日期）</span></span>
+<span class="line"><span>;phone → 我的手机号</span></span>
+<span class="line"><span>;addr → 公司地址（多行）</span></span>
+<span class="line"><span>;gac → git add . &#x26;&#x26; git commit -m "$cursor"</span></span>
+<span class="line"><span>;pr  → ## Description\n\n$cursor\n\n## Test Plan\n\n- [ ] Unit tests\n- [ ] Manual testing</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>Snippets 支持动态占位符（日期、时间、剪贴板内容），也支持光标定位（<code>$cursor</code>）。写周报、回复重复邮件、甚至写代码时的模板注释，都能大幅减少重复劳动。</p>
+<h3 id="5-quicklinks在-raycast-中打开任意网页">5. Quicklinks：在 Raycast 中打开任意网页</h3>
+<p>Quicklinks 让你直接在 Raycast 中搜索并打开特定网站，而不是「打开浏览器 → 进入网站 → 搜索」。</p>
+<p>配置示例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Google 搜索：https://www.google.com/search?q={Query}</span></span>
+<span class="line"><span>GitHub 搜索：https://github.com/search?q={Query}</span></span>
+<span class="line"><span>NPM 搜索：https://www.npmjs.com/search?q={Query}</span></span>
+<span class="line"><span>翻译：https://translate.google.com/?text={Query}</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>输入 <code>gh react hooks</code>，回车，直接跳转到 GitHub 搜索结果页——中间没有任何多余步骤。</p>
+<h2 id="扩展生态raycast-的真正护城河">扩展生态：Raycast 的真正护城河</h2>
+<p>如果核心功能让 Raycast 「好用」，那扩展生态就是让它「不可替代」的原因。Raycast Store 拥有超过 1500 个扩展，以下是我认为开发者必备的：</p>
+<h3 id="开发工具类">开发工具类</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>扩展</th><th>功能</th><th>推荐理由</th></tr></thead><tbody><tr><td><strong>GitHub</strong></td><td>搜索仓库、查看 PR、管理 Issues</td><td>不需要离开编辑器就能处理 GitHub 通知</td></tr><tr><td><strong>VS Code Recent Projects</strong></td><td>快速打开最近项目</td><td>比 VS Code 自带的快得多</td></tr><tr><td><strong>Kill Process</strong></td><td>搜索并终止进程</td><td>比 <code>lsof</code> + <code>kill</code> 快 100 倍</td></tr><tr><td><strong>Color Picker</strong></td><td>取色器 + 颜色格式转换</td><td>前端开发必备，支持 HEX/RGB/HSL</td></tr><tr><td><strong>Tailwind CSS</strong></td><td>搜索 Tailwind 类名和文档</td><td>不需要去官网查文档</td></tr></tbody></table>
+<h3 id="日常效率类">日常效率类</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>扩展</th><th>功能</th></tr></thead><tbody><tr><td><strong>1Password</strong></td><td>在 Raycast 中搜索并复制密码</td></tr><tr><td><strong>Notion</strong></td><td>快速搜索页面、创建数据库条目</td></tr><tr><td><strong>Linear / Jira</strong></td><td>管理任务，查看 Sprint 进度</td></tr><tr><td><strong>Slack</strong></td><td>设置状态、快速跳转频道</td></tr><tr><td><strong>Spotify</strong></td><td>控制播放、搜索歌曲</td></tr></tbody></table>
+<h3 id="实用工具类">实用工具类</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>扩展</th><th>功能</th><th>亮点</th></tr></thead><tbody><tr><td><strong>Google Translate</strong></td><td>即时翻译</td><td>选中文本后一键翻译并复制</td></tr><tr><td><strong>Brew</strong></td><td>管理 Homebrew 包</td><td>搜索、安装、更新，全在 Raycast 内</td></tr><tr><td><strong>Lorem Ipsum</strong></td><td>生成占位文本</td><td>支持自定义长度和格式</td></tr><tr><td><strong>Unix Timestamp</strong></td><td>时间戳转换</td><td>支持秒/毫秒双向转换</td></tr></tbody></table>
+<h3 id="一个鲜为人知但巨好用的扩展quick-event">一个鲜为人知但巨好用的扩展：Quick Event</h3>
+<p>这个扩展让你用自然语言创建日历事件：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>明天下午3点 团队周会 /zoom</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>自动解析时间、创建日历事件，并附带 Zoom 链接——比打开日历应用快 5 倍。</p>
+<h2 id="ai-功能raycast-pro">AI 功能：Raycast Pro</h2>
+<p>Raycast 的基础功能完全免费，但 Pro 订阅（$8/月）解锁了 AI 功能，包括：</p>
+<h3 id="ai-chat">AI Chat</h3>
+<p>在任何应用中选中文本，按快捷键呼出 AI Chat，直接提问。支持 GPT-4、Claude 3.5 Sonnet 等多个模型。特别适合：</p>
+<ul>
+<li>解释一段代码</li>
+<li>翻译并润色文本</li>
+<li>快速回答技术问题（不用切换到浏览器）</li>
+</ul>
+<h3 id="ai-presets">AI Presets</h3>
+<p>你可以创建预设的 AI 行为模板，例如：</p>
+<ul>
+<li>「翻译为英文并保持技术文档风格」</li>
+<li>「总结这段会议记录为三个要点」</li>
+<li>「将以下代码从 JavaScript 转换为 TypeScript」</li>
+</ul>
+<p>Presets 支持社区共享，在 <a href="https://presets.ray.so">presets.ray.so</a> 可以浏览和下载。</p>
+<h3 id="ai-驱动的-emoji-搜索">AI 驱动的 Emoji 搜索</h3>
+<p>输入自然语言描述找到合适的 emoji：</p>
+<ul>
+<li>输入「开心的猫」→ 🐱</li>
+<li>输入「写代码」→ 👨‍💻</li>
+</ul>
+<p>比在 emoji 选择器中翻页快得多。</p>
+<blockquote>
+<p>注意：AI 功能需要订阅 Raycast Pro（$8/月）。基础用户可以选择只使用本地功能，核心效率体验不受影响。</p>
+</blockquote>
+<h2 id="raycast-vs-alfred全面对比">Raycast vs Alfred：全面对比</h2>
+<p>这是 Mac 效率工具圈永恒的争论。作为一个从 Alfred Powerpack 迁移过来的用户，我的感受是：</p>
+<h3 id="alfred-的优势目前仍然成立">Alfred 的优势（目前仍然成立）</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项目</th><th>说明</th></tr></thead><tbody><tr><td><strong>Workflow 灵活性</strong></td><td>Alfred Workflow 更自由，可以调用任意脚本和系统 API</td></tr><tr><td><strong>成熟稳定</strong></td><td>发展十余年，社区 Workflow 资源丰富</td></tr><tr><td><strong>系统资源</strong></td><td>占用更少（虽然差距在缩小）</td></tr><tr><td><strong>文件操作</strong></td><td>文件导航和操作更强大（File Filter、Buffer）</td></tr></tbody></table>
+<h3 id="raycast-的优势">Raycast 的优势</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>项目</th><th>说明</th></tr></thead><tbody><tr><td><strong>开箱即用</strong></td><td>内置剪贴板历史、窗口管理、Snippets，不需要额外配置</td></tr><tr><td><strong>扩展生态</strong></td><td>统一的应用商店，发现和安装扩展只需点一下</td></tr><tr><td><strong>UI/UX 设计</strong></td><td>更现代、更美观，面板交互细腻流畅</td></tr><tr><td><strong>开发者友好</strong></td><td>用 React + TypeScript 编写扩展，学习成本低</td></tr><tr><td><strong>更新频率</strong></td><td>几乎每周都有新功能发布</td></tr><tr><td><strong>AI 集成</strong></td><td>原生 AI 功能（Pro），与系统深度融合</td></tr><tr><td><strong>团队协作</strong></td><td>可以分享扩展配置供团队使用（Teams 功能）</td></tr></tbody></table>
+<h3 id="我个人为什么选择-raycast">我个人为什么选择 Raycast</h3>
+<p>Alfred 更强大吗？在某些方面是的——Workflow 的自由度无人能及。但 Raycast 的「开箱即用」和「持续进化」更契合我的需求：</p>
+<ol>
+<li><strong>我不需要配置</strong>：剪贴板历史、窗口管理、Snippets 都是内置的，不需要像 Alfred 那样找 Workflow</li>
+<li><strong>扩展发现成本低</strong>：在 Store 里浏览就能发现新扩展，不需要去 GitHub 搜索</li>
+<li><strong>AI 原生支持</strong>：虽然 Alfred 也能通过 Workflow 接入 ChatGPT，但 Raycast 的 AI 集成更无缝</li>
+</ol>
+<h2 id="开发者专属配置我的-raycast-设置">开发者专属配置：我的 Raycast 设置</h2>
+<p>分享我的日常设置，供参考：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 快捷键映射（避免与 VS Code / Terminal 冲突）</span></span>
+<span class="line"><span style="color:#B392F0">Raycast</span><span style="color:#9ECBFF"> Hotkey:</span><span style="color:#9ECBFF"> Option+Space（替代默认的</span><span style="color:#9ECBFF"> Cmd+Space）</span></span>
+<span class="line"><span style="color:#B392F0">Clipboard</span><span style="color:#9ECBFF"> History:</span><span style="color:#9ECBFF"> Cmd+Shift+V</span></span>
+<span class="line"><span style="color:#B392F0">AI</span><span style="color:#9ECBFF"> Chat:</span><span style="color:#9ECBFF"> Hyper+C（Hyper</span><span style="color:#9ECBFF"> =</span><span style="color:#9ECBFF"> Cmd+Option+Ctrl+Shift）</span></span>
+<span class="line"><span style="color:#B392F0">Snippets搜索:</span><span style="color:#9ECBFF"> Cmd+Shift+S</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 已启用扩展（开发相关）</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> GitHub</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> VS</span><span style="color:#9ECBFF"> Code</span><span style="color:#9ECBFF"> Recent</span><span style="color:#9ECBFF"> Projects</span><span style="color:#E1E4E8">  </span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Kill</span><span style="color:#9ECBFF"> Process</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Color</span><span style="color:#9ECBFF"> Picker</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Brew</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Docker</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> Tailwind</span><span style="color:#9ECBFF"> CSS</span></span>
+<span class="line"><span style="color:#B392F0">-</span><span style="color:#9ECBFF"> NPM</span><span style="color:#9ECBFF"> Search</span></span>
+<span class="line"></span></code></pre>
+<h3 id="自定义脚本一键启动开发环境">自定义脚本：一键启动开发环境</h3>
+<p>我最常用的自定义功能是通过 Raycast 脚本一键启动某个项目的完整开发环境：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D">#!/bin/bash</span></span>
+<span class="line"><span style="color:#6A737D"># 保存为 Raycast Script Command</span></span>
+<span class="line"><span style="color:#6A737D"># 一键启动 Next.js 项目的开发环境</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 打开 VS Code</span></span>
+<span class="line"><span style="color:#B392F0">open</span><span style="color:#79B8FF"> -a</span><span style="color:#9ECBFF"> "Visual Studio Code"</span><span style="color:#9ECBFF"> ~/projects/my-app</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 等待 VS Code 加载</span></span>
+<span class="line"><span style="color:#B392F0">sleep</span><span style="color:#79B8FF"> 2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 启动 Docker 服务</span></span>
+<span class="line"><span style="color:#B392F0">open</span><span style="color:#79B8FF"> -a</span><span style="color:#9ECBFF"> Docker</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 启动开发服务器</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> ~/projects/my-app</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#B392F0">code</span><span style="color:#79B8FF"> --goto</span><span style="color:#9ECBFF"> package.json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">echo</span><span style="color:#9ECBFF"> "开发环境已就绪 🚀"</span></span>
+<span class="line"></span></code></pre>
+<h2 id="进阶技巧">进阶技巧</h2>
+<p>掌握这些技巧后，你的 Raycast 使用体验将再上一个台阶：</p>
+<ol>
+<li><strong>Fallback Commands</strong>：当输入没有匹配到任何命令时，自动触发 Google 搜索或其他操作</li>
+<li><strong>别名（Alias）</strong>：为常用命令设置缩写，比如 <code>gh</code> → <code>Search GitHub</code></li>
+<li><strong>Quicklink + 参数</strong>：输入 <code>npm react</code> 自动在 npmjs.com 搜索「react」</li>
+<li><strong>文件搜索过滤</strong>：<code>/documents *.pdf</code> 只在 Documents 目录搜索 PDF 文件</li>
+<li><strong>Search Menu Items</strong>：搜索当前应用的菜单栏命令，告别「这个功能在哪个菜单下」的烦恼</li>
+</ol>
+<h2 id="总结">总结</h2>
+<p>Raycast 真正的价值不在于它能做什么（Alfred 理论上也能做到大部分），而在于它让你<strong>自然地去做</strong>。</p>
+<p>当你不需要思考「我该怎么完成这个操作」时，效率才真正被释放。Raycast 的统一命令面板消除了操作之间的边界——启动应用、查询信息、管理代码片段、翻译文本、执行命令……这些原本分散在不同工具中的操作，现在在一个地方完成。</p>
+<p>如果你还没试过，下载免费版就足够体验核心功能了。如果觉得好用，Pro 订阅的 AI 功能也值得一试。</p>
+<blockquote>
+<p>下载链接：<a href="https://raycast.com">raycast.com</a>
+扩展商店：<a href="https://raycast.com/store">raycast.com/store</a>
+官方文档：<a href="https://manual.raycast.com">manual.raycast.com</a></p>
+</blockquote>
+<hr>
+<p><strong>附：三个值得关注的开源替代品</strong></p>
+<p>如果你在找跨平台或开源的 Raycast 替代品：</p>
+<ul>
+<li><strong><a href="https://albertlauncher.github.io/">Albert</a></strong>：Linux 原生启动器，插件机制灵活</li>
+<li><strong><a href="https://ueli.app/">Ueli</a></strong>：跨平台（Windows/macOS/Linux），支持自定义插件</li>
+<li><strong><a href="https://www.flowlauncher.com/">Flow Launcher</a></strong>：Windows 平台最佳 Raycast 替代方案</li>
+</ul> </div> <!-- 底部交互栏 --> <div class="mt-16 flex items-center justify-between border-t border-gray-100 pt-8 dark:border-gray-800" data-astro-cid-7jjqptxk> <button class="like-btn group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl border border-gray-200 px-5 py-2.5 font-mono text-sm text-gray-500 transition-all hover:border-klein/40 hover:text-klein dark:border-gray-700 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-slug="productivity-raycast" data-astro-cid-7jjqptxk> <!-- 心形图标动画 --> <span class="like-icon relative flex h-5 w-5 items-center justify-center" data-astro-cid-7jjqptxk> <svg class="heart-outline absolute transition-all group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg> <svg class="heart-filled absolute scale-0 opacity-0 transition-all" fill="#002FA7" stroke="#002FA7" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg> </span> <span class="like-label" data-astro-cid-7jjqptxk>点赞</span> <span class="like-count font-semibold" data-astro-cid-7jjqptxk>--</span> </button> <a href="/blog" class="inline-flex items-center gap-1 font-mono text-sm text-gray-400 transition-colors hover:text-klein dark:text-gray-500 dark:hover:text-klein-300" data-astro-cid-7jjqptxk> <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" data-astro-cid-7jjqptxk></path></svg>
+返回列表
+</a> </div> <!-- Giscus 评论区 --> <div class="giscus mt-12" data-slug="productivity-raycast" data-astro-cid-7jjqptxk></div> </article> </main> <footer class="border-t border-gray-100 py-4 dark:border-gray-800"> <div class="mx-auto max-w-6xl px-6"> <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-between"> <div class="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500"> <span class="flex h-6 w-6 items-center justify-center rounded bg-klein text-xs font-bold text-white">X</span> <span>&copy; 2026 X-ATCN</span> </div> <div class="text-sm text-gray-400 dark:text-gray-500">Ike Bullen × Klein Blue</div> </div> </div> </footer> </div> <!-- 暗色模式切换按钮 --> <button id="theme-toggle" class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 shadow-lg backdrop-blur transition-all hover:scale-110 dark:border-gray-700 dark:bg-gray-800/80" aria-label="切换主题"> <svg id="sun-icon" class="h-5 w-5 text-amber-500 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg> <svg id="moon-icon" class="h-5 w-5 text-gray-700 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg> </button>  </body></html> <script defer>
+  (function() {
+    var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
+    var slug = document.querySelector('[data-slug]')?.getAttribute('data-slug');
+    if (!slug) return;
+
+    // ── 1. 浏览量 +1 ──
+    fetch(SUPABASE_URL + '/rest/v1/rpc/increment_views', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_slug: slug })
+    }).then(function(r) { return r.text(); }).then(function(count) {
+      var el = document.querySelector('.views-count');
+      if (el && count) animateCount(el, parseInt(count) || 0);
+    });
+
+    // ── 2. 读取点赞数 ──
+    fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug) + '&select=likes', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data[0]) {
+        var likes = data[0].likes || 0;
+        updateLikeUI(likes, false);
+      }
+    });
+
+    // ── 3. 点赞按钮（心形动画）──
+    var likeBtn = document.querySelector('.like-btn');
+    if (likeBtn) {
+      likeBtn.addEventListener('click', function() {
+        if (likeBtn.classList.contains('liked')) return;
+        fetch(SUPABASE_URL + '/rest/v1/rpc/increment_likes', {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_slug: slug })
+        }).then(function(r) { return r.text(); }).then(function(count) {
+          updateLikeUI(parseInt(count) || 0, true);
+        });
+      });
+    }
+
+    function updateLikeUI(likes, animate) {
+      var lc = document.querySelector('.like-count');
+      var ls = document.querySelector('.likes-count');
+      if (lc) lc.textContent = likes;
+      if (ls) ls.textContent = likes;
+      var btn = document.querySelector('.like-btn');
+      if (!btn) return;
+      if (likes > 0) {
+        btn.classList.add('liked');
+        var outline = btn.querySelector('.heart-outline');
+        var filled = btn.querySelector('.heart-filled');
+        if (outline) outline.style.opacity = '0';
+        if (filled) { filled.style.transform = 'scale(1)'; filled.style.opacity = '1'; }
+        var label = btn.querySelector('.like-label');
+        if (label) label.textContent = '已赞';
+        if (animate) {
+          btn.style.transform = 'scale(1.15)';
+          setTimeout(function() { btn.style.transform = ''; }, 200);
+        }
+      }
+    }
+
+    // 数字递增
+    function animateCount(el, target) {
+      if (!el) return;
+      el.classList.add('stat-loaded');
+      var current = 0;
+      var step = Math.max(1, Math.ceil(target / 20));
+      var timer = setInterval(function() {
+        current += step;
+        if (current >= target) { el.textContent = target; clearInterval(timer); }
+        else { el.textContent = current; }
+      }, 30);
+    }
+
+    // ── 4. Giscus 评论 + 监听评论数 ──
+    window.addEventListener('message', function(event) {
+      if (!event.origin.includes('giscus')) return;
+      if (event.data?.giscus?.discussion) {
+        var d = event.data.giscus.discussion;
+        var count = (d.totalCommentCount || 0) + (d.totalReplyCount || 0);
+        var cc = document.querySelector('.comments-count');
+        if (cc && count != null) cc.textContent = count;
+        fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug), {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ comments: count })
+        });
+      }
+    });
+
+    // Giscus 组件
+    var gs = document.createElement('script');
+    gs.src = 'https://giscus.app/client.js';
+    gs.setAttribute('data-repo', 'jynight/MyBlog');
+    gs.setAttribute('data-repo-id', 'R_kgDOSZJ6kg');
+    gs.setAttribute('data-category', 'General');
+    gs.setAttribute('data-category-id', 'DIC_kwDOSZJ6ks4C8sa_');
+    gs.setAttribute('data-mapping', 'pathname');
+    gs.setAttribute('data-reactions-enabled', '1');
+    gs.setAttribute('data-emit-metadata', '1');
+    gs.setAttribute('data-input-position', 'bottom');
+    gs.setAttribute('data-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    gs.setAttribute('data-lang', 'zh-CN');
+    gs.setAttribute('crossorigin', 'anonymous');
+    gs.async = true;
+    document.querySelector('.giscus')?.appendChild(gs);
+  })();
+</script>  <script defer>
+  // 代码块复制按钮
+  document.querySelectorAll('.prose pre').forEach(function(pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = '复制';
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      navigator.clipboard.writeText(code.textContent || '').then(function() {
+        btn.textContent = '✓ 已复制';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+</script>

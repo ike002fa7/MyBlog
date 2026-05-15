@@ -1,0 +1,422 @@
+<!DOCTYPE html><html lang="zh-CN" class="h-full"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><!-- Baidu Site Verification --><meta name="baidu-site-verification" content="codeva-mapRKQ9fRa"><!-- Primary Meta --><title>Hermes Agent 在 WSL 中的部署与配置指南 | X-ATCN</title><meta name="description" content="在 WSL2 中从零部署 Nous Research 的 Hermes Agent，接入 QQ Bot 实现智能对话"><meta name="author" content="Ike Bullen"><link rel="canonical" href="https://www.x-atcn.top/blog/ai-hermes-agent-wsl"><!-- Open Graph / Facebook --><meta property="og:type" content="article"><meta property="og:title" content="Hermes Agent 在 WSL 中的部署与配置指南 | X-ATCN"><meta property="og:description" content="在 WSL2 中从零部署 Nous Research 的 Hermes Agent，接入 QQ Bot 实现智能对话"><meta property="og:url" content="https://www.x-atcn.top/blog/ai-hermes-agent-wsl"><meta property="og:site_name" content="X-ATCN"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://www.x-atcn.top/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="article:published_time" content="2026-05-10T00:00:00.000Z"><meta property="article:author" content="Ike Bullen"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Hermes Agent 在 WSL 中的部署与配置指南 | X-ATCN"><meta name="twitter:description" content="在 WSL2 中从零部署 Nous Research 的 Hermes Agent，接入 QQ Bot 实现智能对话"><meta name="twitter:image" content="https://www.x-atcn.top/og-default.png"><!-- DNS Preconnect --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><!-- 暗色模式防闪烁 --><script>
+      (function(){var s=localStorage.getItem('theme');if(s==='dark'||(!s&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})();
+    </script><!-- 页面级 head 注入（JSON-LD 等） --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Hermes Agent 在 WSL 中的部署与配置指南","description":"在 WSL2 中从零部署 Nous Research 的 Hermes Agent，接入 QQ Bot 实现智能对话","datePublished":"2026-05-10T00:00:00.000Z","dateModified":"2026-05-10T00:00:00.000Z","author":{"@type":"Person","name":"Ike Bullen","url":"https://www.x-atcn.top/about"},"publisher":{"@type":"Organization","name":"X-ATCN","logo":{"@type":"ImageObject","url":"https://www.x-atcn.top/favicon.svg"}},"url":"https://www.x-atcn.top/blog/ai-hermes-agent-wsl","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.x-atcn.top/blog/ai-hermes-agent-wsl"},"keywords":"AI, WSL, Hermes Agent, 部署, QQ Bot"}</script> <meta name="keywords" content="AI, WSL, Hermes Agent, 部署, QQ Bot"><link rel="stylesheet" href="/_astro/about.D7_znXTo.css">
+<style>.liked[data-astro-cid-7jjqptxk] .heart-outline[data-astro-cid-7jjqptxk]{opacity:0}.liked[data-astro-cid-7jjqptxk] .heart-filled[data-astro-cid-7jjqptxk]{transform:scale(1);opacity:1}.prose[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk]{position:relative}.prose[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk]:hover .copy-btn[data-astro-cid-7jjqptxk]{opacity:1}.copy-btn[data-astro-cid-7jjqptxk]{position:absolute;top:8px;right:8px;padding:4px 10px;font-size:11px;font-family:JetBrains Mono,monospace;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#9ca3af;cursor:pointer;opacity:0;transition:opacity .2s}.copy-btn[data-astro-cid-7jjqptxk]:hover{background:#374151;color:#f3f4f6}.copy-btn[data-astro-cid-7jjqptxk].copied{color:#34d399;border-color:#34d399}
+</style><script type="module" src="/_astro/hoisted.CwcBXsj9.js"></script></head> <body class="h-full bg-white text-gray-900 font-sans antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100"> <!-- 滚动进度条 --> <div id="scroll-progress" class="fixed top-0 left-0 z-50 h-0.5 bg-klein transition-[width] duration-150" style="width:0%"></div> <div class="flex min-h-full flex-col"> <header class="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md transition-colors dark:border-gray-800 dark:bg-gray-950/80" id="site-header"> <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"> <a href="/" class="group flex items-center gap-2 text-xl font-bold tracking-tight"> <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-klein text-sm font-bold text-white transition-transform group-hover:scale-110">X</span> <span class="text-gray-900 transition-colors dark:text-white">X-ATCN</span> </a> <div class="flex items-center gap-2"> <!-- 桌面导航 --> <ul class="hidden gap-1 md:flex"> <li> <a href="/" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"> 首页 </a> </li><li> <a href="/blog" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   bg-klein text-white shadow-sm"> 博客 </a> </li><li> <a href="/about" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"> 关于我 </a> </li> </ul> <!-- 搜索按钮 --> <button id="search-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800" aria-label="搜索" title="搜索 (Ctrl+K)"> <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> </button> <!-- 移动端汉堡按钮 --> <button id="menu-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800" aria-label="菜单"> <svg id="menu-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg> <svg id="menu-close" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> </button> </div> </nav> <!-- 移动端菜单面板 --> <div id="mobile-menu" class="hidden border-t border-gray-100 bg-white px-6 pb-4 pt-2 md:hidden dark:border-gray-800 dark:bg-gray-950"> <ul class="flex flex-col gap-1"> <li> <a href="/" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"> 首页 </a> </li><li> <a href="/blog" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 bg-klein text-white"> 博客 </a> </li><li> <a href="/about" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"> 关于我 </a> </li> </ul> </div> </header> <!-- 搜索弹窗 --> <div id="search-overlay" class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 pt-[15vh] backdrop-blur-sm"> <div class="mx-4 w-full max-w-xl rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900"> <div class="flex items-center border-b border-gray-100 px-4 dark:border-gray-700"> <svg class="h-5 w-5 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> <input id="search-input" type="text" placeholder="搜索文章…" class="w-full bg-transparent px-3 py-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500" autofocus> <kbd class="hidden rounded border border-gray-200 px-1.5 py-0.5 font-mono text-[10px] text-gray-400 sm:inline-block dark:border-gray-600">Esc</kbd> </div> <div id="search-results" class="max-h-72 overflow-y-auto p-2"> <p class="px-3 py-6 text-center text-sm text-gray-400">输入关键词搜索文章标题和摘要</p> </div> </div> </div>  <main class="flex-1 flex flex-col">  <article class="mx-auto w-full max-w-6xl px-6 py-12 md:py-16" data-astro-cid-7jjqptxk> <!-- 文章头部 --> <header class="mb-10" data-astro-cid-7jjqptxk> <div class="mb-5 flex flex-wrap gap-2 items-center" data-astro-cid-7jjqptxk> <span class="rounded-full bg-klein/10 px-3 py-1 font-mono text-xs font-medium text-klein border border-klein/20 dark:bg-klein/20 dark:border-klein/40 dark:text-klein-300" data-astro-cid-7jjqptxk>节点</span> <span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#AI</span><span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#WSL</span><span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#Hermes Agent</span><span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#部署</span><span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#QQ Bot</span> </div> <h1 class="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-5xl dark:text-white" data-astro-cid-7jjqptxk>Hermes Agent 在 WSL 中的部署与配置指南</h1> <div class="mt-6 flex flex-wrap items-center gap-4" data-astro-cid-7jjqptxk> <time class="inline-flex items-center gap-2 font-mono text-sm text-gray-400 dark:text-gray-500" data-astro-cid-7jjqptxk> <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" data-astro-cid-7jjqptxk></path></svg> 2026年5月10日 </time> <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" data-astro-cid-7jjqptxk></span> <span class="stats-counter inline-flex items-center gap-3 font-mono text-xs text-gray-400 dark:text-gray-500" data-slug="ai-hermes-agent-wsl" data-astro-cid-7jjqptxk> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" data-astro-cid-7jjqptxk></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" data-astro-cid-7jjqptxk></path></svg><span class="views-count" data-astro-cid-7jjqptxk>--</span></span> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg><span class="likes-count" data-astro-cid-7jjqptxk>--</span></span> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" data-astro-cid-7jjqptxk></path></svg><span class="comments-count" data-astro-cid-7jjqptxk>--</span></span> </span> </div> </header> <!-- 文章正文 --> <div class="prose prose-lg prose-gray max-w-none dark:prose-invert" data-astro-cid-7jjqptxk> <h2 id="引言">引言</h2>
+<p><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> 是 Nous Research 开源的个人 AI Agent 框架。它支持多模型、多平台接入、技能系统、定时任务、记忆管理等强大功能。本文将详细介绍如何在 WSL2 环境中从零部署 Hermes Agent，并接入 QQ Bot。</p>
+<h2 id="环境准备">环境准备</h2>
+<h3 id="wsl2-基础环境">WSL2 基础环境</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 确认 WSL 版本</span></span>
+<span class="line"><span style="color:#B392F0">wsl</span><span style="color:#79B8FF"> --version</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 推荐使用 Ubuntu 24.04</span></span>
+<span class="line"><span style="color:#B392F0">wsl</span><span style="color:#79B8FF"> --install</span><span style="color:#79B8FF"> -d</span><span style="color:#9ECBFF"> Ubuntu-24.04</span></span>
+<span class="line"></span></code></pre>
+<h3 id="安装依赖">安装依赖</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 更新系统</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt</span><span style="color:#9ECBFF"> update</span><span style="color:#E1E4E8"> &#x26;&#x26; </span><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt</span><span style="color:#9ECBFF"> upgrade</span><span style="color:#79B8FF"> -y</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 安装 Node.js（推荐 20.x LTS）</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -fsSL</span><span style="color:#9ECBFF"> https://deb.nodesource.com/setup_20.x</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> sudo</span><span style="color:#79B8FF"> -E</span><span style="color:#9ECBFF"> bash</span><span style="color:#9ECBFF"> -</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -y</span><span style="color:#9ECBFF"> nodejs</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 安装 pnpm</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -g</span><span style="color:#9ECBFF"> pnpm</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 安装 Python 3.11+</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -y</span><span style="color:#9ECBFF"> python3</span><span style="color:#9ECBFF"> python3-pip</span><span style="color:#9ECBFF"> python3-venv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 安装 Git</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> apt</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -y</span><span style="color:#9ECBFF"> git</span></span>
+<span class="line"></span></code></pre>
+<p>验证安装：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">node</span><span style="color:#79B8FF"> --version</span><span style="color:#6A737D">   # v20.x.x</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#79B8FF"> --version</span><span style="color:#6A737D">   # 9.x.x</span></span>
+<span class="line"><span style="color:#B392F0">python3</span><span style="color:#79B8FF"> --version</span><span style="color:#6A737D"> # 3.11+</span></span>
+<span class="line"></span></code></pre>
+<h2 id="克隆与安装">克隆与安装</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 克隆仓库</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/NousResearch/hermes-agent.git</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> hermes-agent</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 安装依赖</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> install</span></span>
+<span class="line"></span></code></pre>
+<blockquote>
+<p><strong>注意</strong>：如果遇到网络问题，可以使用 npmmirror 镜像：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> config</span><span style="color:#9ECBFF"> set</span><span style="color:#9ECBFF"> registry</span><span style="color:#9ECBFF"> https://registry.npmmirror.com</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> install</span></span>
+<span class="line"></span></code></pre>
+</blockquote>
+<h2 id="配置文件详解">配置文件详解</h2>
+<p>安装完成后，需要配置 <code>config.yaml</code>。核心配置结构如下：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># 模型配置</span></span>
+<span class="line"><span style="color:#85E89D">model</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  provider</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">deepseek</span><span style="color:#6A737D">           # 可选: openai, anthropic, deepseek, openrouter 等</span></span>
+<span class="line"><span style="color:#85E89D">  model</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">deepseek-chat</span><span style="color:#6A737D">         # 模型名称</span></span>
+<span class="line"><span style="color:#85E89D">  api_key</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">${DEEPSEEK_API_KEY}</span><span style="color:#6A737D"> # 从环境变量读取</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># QQ Bot 配置</span></span>
+<span class="line"><span style="color:#85E89D">platforms</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  qqbot</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">    app_id</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"your_qq_app_id"</span></span>
+<span class="line"><span style="color:#85E89D">    token</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"your_qq_token"</span></span>
+<span class="line"><span style="color:#85E89D">    secret</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"your_qq_secret"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 技能系统</span></span>
+<span class="line"><span style="color:#85E89D">skills</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">  path</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">~/.hermes/skills/</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 记忆管理</span></span>
+<span class="line"><span style="color:#85E89D">memory</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">  max_tokens</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2200</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 工具配置</span></span>
+<span class="line"><span style="color:#85E89D">tools</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  terminal</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">  web_search</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">  browser</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"></span></code></pre>
+<blockquote>
+<p><strong>安全提示</strong>：API Key 和 QQ Bot 密钥建议使用环境变量，不要硬编码在配置文件中。</p>
+</blockquote>
+<h2 id="运行-hermes-agent">运行 Hermes Agent</h2>
+<h3 id="前台运行调试模式">前台运行（调试模式）</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> hermes-agent</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> start</span></span>
+<span class="line"></span></code></pre>
+<p>首次运行会创建 <code>~/.hermes/</code> 目录，包含配置文件、记忆存储、技能目录等。</p>
+<h3 id="配置为-systemd-服务">配置为 systemd 服务</h3>
+<p>创建服务文件：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> nano</span><span style="color:#9ECBFF"> /etc/systemd/system/hermes-agent.service</span></span>
+<span class="line"></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ini"><code><span class="line"><span style="color:#B392F0">[Unit]</span></span>
+<span class="line"><span style="color:#F97583">Description</span><span style="color:#E1E4E8">=Hermes Agent</span></span>
+<span class="line"><span style="color:#F97583">After</span><span style="color:#E1E4E8">=network.target</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">[Service]</span></span>
+<span class="line"><span style="color:#F97583">Type</span><span style="color:#E1E4E8">=simple</span></span>
+<span class="line"><span style="color:#F97583">User</span><span style="color:#E1E4E8">=your_username</span></span>
+<span class="line"><span style="color:#F97583">WorkingDirectory</span><span style="color:#E1E4E8">=/home/your_username/hermes-agent</span></span>
+<span class="line"><span style="color:#F97583">Environment</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"DEEPSEEK_API_KEY=sk-xxx"</span></span>
+<span class="line"><span style="color:#F97583">Environment</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"NODE_ENV=production"</span></span>
+<span class="line"><span style="color:#F97583">ExecStart</span><span style="color:#E1E4E8">=/usr/bin/pnpm start</span></span>
+<span class="line"><span style="color:#F97583">Restart</span><span style="color:#E1E4E8">=on-failure</span></span>
+<span class="line"><span style="color:#F97583">RestartSec</span><span style="color:#E1E4E8">=10</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">[Install]</span></span>
+<span class="line"><span style="color:#F97583">WantedBy</span><span style="color:#E1E4E8">=multi-user.target</span></span>
+<span class="line"></span></code></pre>
+<p>启动服务：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> daemon-reload</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> enable</span><span style="color:#9ECBFF"> hermes-agent</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> start</span><span style="color:#9ECBFF"> hermes-agent</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> status</span><span style="color:#9ECBFF"> hermes-agent</span></span>
+<span class="line"></span></code></pre>
+<h2 id="接入-qq-bot">接入 QQ Bot</h2>
+<h3 id="1-注册-qq-开放平台应用">1. 注册 QQ 开放平台应用</h3>
+<p>前往 <a href="https://q.qq.com/">QQ 开放平台</a> 创建机器人应用，获取：</p>
+<ul>
+<li><code>AppID</code></li>
+<li><code>Token</code></li>
+<li><code>Secret</code></li>
+</ul>
+<h3 id="2-配置权限">2. 配置权限</h3>
+<p>在 QQ 开放平台中开启机器人需要的权限：</p>
+<ul>
+<li>消息收发</li>
+<li>群聊消息</li>
+<li>私聊消息</li>
+</ul>
+<h3 id="3-更新-configyaml">3. 更新 config.yaml</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">platforms</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  qqbot</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">    app_id</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"你的AppID"</span></span>
+<span class="line"><span style="color:#85E89D">    token</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"你的Token"</span></span>
+<span class="line"><span style="color:#85E89D">    secret</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"你的Secret"</span></span>
+<span class="line"></span></code></pre>
+<h3 id="4-重启服务">4. 重启服务</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> restart</span><span style="color:#9ECBFF"> hermes-agent</span></span>
+<span class="line"></span></code></pre>
+<p>查看日志确认连接状态：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">journalctl</span><span style="color:#79B8FF"> -u</span><span style="color:#9ECBFF"> hermes-agent</span><span style="color:#79B8FF"> -f</span></span>
+<span class="line"></span></code></pre>
+<p>看到 <code>qqbot: Connected ✓</code> 即表示接入成功。</p>
+<h2 id="wsl-特定注意事项">WSL 特定注意事项</h2>
+<h3 id="网络问题">网络问题</h3>
+<p>WSL2 使用 NAT 网络，部分境外 API 可能访问缓慢：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 测试 API 连通性</span></span>
+<span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -I</span><span style="color:#9ECBFF"> https://api.deepseek.com</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 如果超时，配置代理</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> HTTP_PROXY</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">http://host_ip:port</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> HTTPS_PROXY</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">http://host_ip:port</span></span>
+<span class="line"></span></code></pre>
+<h3 id="文件权限">文件权限</h3>
+<p>WSL 中 <code>/mnt/c/</code> 挂载的 Windows 文件系统权限不同：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 所有项目文件放在 WSL 原生文件系统中</span></span>
+<span class="line"><span style="color:#6A737D"># 推荐位置：~/hermes-agent</span></span>
+<span class="line"><span style="color:#6A737D"># 避免使用：/mnt/c/Users/xxx/hermes-agent</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 如果必须跨文件系统，重新挂载：</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> umount</span><span style="color:#9ECBFF"> /mnt/c</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> mount</span><span style="color:#79B8FF"> -t</span><span style="color:#9ECBFF"> drvfs</span><span style="color:#9ECBFF"> C:</span><span style="color:#9ECBFF"> /mnt/c</span><span style="color:#79B8FF"> -o</span><span style="color:#9ECBFF"> metadata</span></span>
+<span class="line"></span></code></pre>
+<h3 id="端口访问">端口访问</h3>
+<p>从 Windows 访问 WSL 中的服务：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="powershell"><code><span class="line"><span style="color:#6A737D"># 在 PowerShell（管理员）中设置端口转发</span></span>
+<span class="line"><span style="color:#E1E4E8">netsh interface portproxy add v4tov4 listenport</span><span style="color:#F97583">=</span><span style="color:#79B8FF">3001</span><span style="color:#E1E4E8"> connectaddress</span><span style="color:#F97583">=</span><span style="color:#79B8FF">127.0</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">0.1</span><span style="color:#E1E4E8"> connectport</span><span style="color:#F97583">=</span><span style="color:#79B8FF">3001</span></span>
+<span class="line"></span></code></pre>
+<h2 id="调试技巧">调试技巧</h2>
+<h3 id="查看详细日志">查看详细日志</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 开发模式下增加日志级别</span></span>
+<span class="line"><span style="color:#E1E4E8">DEBUG</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">*</span><span style="color:#B392F0"> pnpm</span><span style="color:#9ECBFF"> start</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 或修改 config.yaml</span></span>
+<span class="line"><span style="color:#B392F0">logging:</span></span>
+<span class="line"><span style="color:#B392F0">  level:</span><span style="color:#9ECBFF"> debug</span></span>
+<span class="line"></span></code></pre>
+<h3 id="测试模型连接">测试模型连接</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 使用 hermes CLI 测试</span></span>
+<span class="line"><span style="color:#B392F0">pnpm</span><span style="color:#9ECBFF"> hermes</span><span style="color:#9ECBFF"> chat</span><span style="color:#79B8FF"> --message</span><span style="color:#9ECBFF"> "Hello, are you working?"</span></span>
+<span class="line"></span></code></pre>
+<h3 id="常见问题">常见问题</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>问题</th><th>原因</th><th>解决</th></tr></thead><tbody><tr><td><code>Module not found</code></td><td>依赖未安装</td><td><code>pnpm install</code></td></tr><tr><td><code>API key invalid</code></td><td>Key 错误或过期</td><td>检查环境变量</td></tr><tr><td>QQ Bot 无法连接</td><td>Token 或网络问题</td><td>检查防火墙和 AppID</td></tr><tr><td>内存不足</td><td>WSL 默认内存限制</td><td>创建 <code>.wslconfig</code> 增加内存</td></tr></tbody></table>
+<h3 id="wsl-内存优化">WSL 内存优化</h3>
+<p>在 Windows 用户目录创建 <code>.wslconfig</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ini"><code><span class="line"><span style="color:#B392F0">[wsl2]</span></span>
+<span class="line"><span style="color:#F97583">memory</span><span style="color:#E1E4E8">=8GB</span></span>
+<span class="line"><span style="color:#F97583">processors</span><span style="color:#E1E4E8">=4</span></span>
+<span class="line"><span style="color:#F97583">swap</span><span style="color:#E1E4E8">=4GB</span></span>
+<span class="line"></span></code></pre>
+<h2 id="技能系统">技能系统</h2>
+<p>Hermes Agent 的强大之处在于技能（Skills）系统。技能是 YAML + Markdown 格式的指导文件，存放在 <code>~/.hermes/skills/</code> 目录。</p>
+<h3 id="创建自定义技能">创建自定义技能</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">mkdir</span><span style="color:#79B8FF"> -p</span><span style="color:#9ECBFF"> ~/.hermes/skills/my-skill</span></span>
+<span class="line"><span style="color:#B392F0">cat</span><span style="color:#F97583"> ></span><span style="color:#9ECBFF"> ~/.hermes/skills/my-skill/SKILL.md</span><span style="color:#F97583"> &#x3C;&#x3C;</span><span style="color:#9ECBFF"> 'EOF'</span></span>
+<span class="line"><span style="color:#9ECBFF">---</span></span>
+<span class="line"><span style="color:#9ECBFF">name: my-skill</span></span>
+<span class="line"><span style="color:#9ECBFF">description: 我的自定义技能</span></span>
+<span class="line"><span style="color:#9ECBFF">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">## 触发条件</span></span>
+<span class="line"><span style="color:#9ECBFF">当用户提到 XXX 时触发</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">## 执行步骤</span></span>
+<span class="line"><span style="color:#9ECBFF">1. 第一步</span></span>
+<span class="line"><span style="color:#9ECBFF">2. 第二步</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">## 注意事项</span></span>
+<span class="line"><span style="color:#9ECBFF">- 注意点 1</span></span>
+<span class="line"><span style="color:#9ECBFF">EOF</span></span>
+<span class="line"></span></code></pre>
+<h3 id="从社区安装技能">从社区安装技能</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 列出可用技能</span></span>
+<span class="line"><span style="color:#B392F0">hermes</span><span style="color:#9ECBFF"> skills</span><span style="color:#9ECBFF"> list</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 安装技能</span></span>
+<span class="line"><span style="color:#B392F0">hermes</span><span style="color:#9ECBFF"> skills</span><span style="color:#9ECBFF"> install</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">skill-nam</span><span style="color:#E1E4E8">e</span><span style="color:#F97583">></span></span>
+<span class="line"></span></code></pre>
+<h2 id="生产环境建议">生产环境建议</h2>
+<ol>
+<li><strong>使用 systemd</strong>：确保进程崩溃后自动重启</li>
+<li><strong>日志轮转</strong>：配置 <code>journalctl</code> 日志大小限制</li>
+<li><strong>定期备份</strong>：备份 <code>~/.hermes/</code> 目录（记忆 + 技能 + 配置）</li>
+<li><strong>监控</strong>：设置心跳检查，Agent 离线时告警</li>
+<li><strong>安全</strong>：API Key 使用环境变量，限制文件权限</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 备份脚本示例</span></span>
+<span class="line"><span style="color:#6A737D">#!/bin/bash</span></span>
+<span class="line"><span style="color:#B392F0">tar</span><span style="color:#79B8FF"> -czf</span><span style="color:#9ECBFF"> hermes-backup-</span><span style="color:#E1E4E8">$(</span><span style="color:#B392F0">date</span><span style="color:#9ECBFF"> +%Y%m%d</span><span style="color:#E1E4E8">)</span><span style="color:#9ECBFF">.tar.gz</span><span style="color:#9ECBFF"> ~/.hermes/</span></span>
+<span class="line"></span></code></pre>
+<h2 id="总结">总结</h2>
+<p>在 WSL2 中部署 Hermes Agent 整体流程顺畅，主要步骤包括：</p>
+<ol>
+<li>安装 Node.js / pnpm / Python 依赖</li>
+<li>克隆仓库并安装</li>
+<li>配置模型和平台连接</li>
+<li>设置 systemd 自动启动</li>
+<li>调试和优化</li>
+</ol>
+<p>Hermes Agent 的技能系统和记忆管理使其成为强大的个人 AI 助手。结合 QQ Bot，可以让它随时随地为你服务。</p>
+<hr>
+<blockquote>
+<p><strong>参考链接</strong>：</p>
+<ul>
+<li><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent GitHub</a></li>
+<li><a href="https://hermes-agent.nousresearch.com/docs">Hermes Agent 文档</a></li>
+<li><a href="https://q.qq.com/">QQ 开放平台</a></li>
+</ul>
+</blockquote> </div> <!-- 底部交互栏 --> <div class="mt-16 flex items-center justify-between border-t border-gray-100 pt-8 dark:border-gray-800" data-astro-cid-7jjqptxk> <button class="like-btn group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl border border-gray-200 px-5 py-2.5 font-mono text-sm text-gray-500 transition-all hover:border-klein/40 hover:text-klein dark:border-gray-700 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-slug="ai-hermes-agent-wsl" data-astro-cid-7jjqptxk> <!-- 心形图标动画 --> <span class="like-icon relative flex h-5 w-5 items-center justify-center" data-astro-cid-7jjqptxk> <svg class="heart-outline absolute transition-all group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg> <svg class="heart-filled absolute scale-0 opacity-0 transition-all" fill="#002FA7" stroke="#002FA7" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg> </span> <span class="like-label" data-astro-cid-7jjqptxk>点赞</span> <span class="like-count font-semibold" data-astro-cid-7jjqptxk>--</span> </button> <a href="/blog" class="inline-flex items-center gap-1 font-mono text-sm text-gray-400 transition-colors hover:text-klein dark:text-gray-500 dark:hover:text-klein-300" data-astro-cid-7jjqptxk> <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" data-astro-cid-7jjqptxk></path></svg>
+返回列表
+</a> </div> <!-- Giscus 评论区 --> <div class="giscus mt-12" data-slug="ai-hermes-agent-wsl" data-astro-cid-7jjqptxk></div> </article> </main> <footer class="border-t border-gray-100 py-4 dark:border-gray-800"> <div class="mx-auto max-w-6xl px-6"> <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-between"> <div class="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500"> <span class="flex h-6 w-6 items-center justify-center rounded bg-klein text-xs font-bold text-white">X</span> <span>&copy; 2026 X-ATCN</span> </div> <div class="text-sm text-gray-400 dark:text-gray-500">Ike Bullen × Klein Blue</div> </div> </div> </footer> </div> <!-- 暗色模式切换按钮 --> <button id="theme-toggle" class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 shadow-lg backdrop-blur transition-all hover:scale-110 dark:border-gray-700 dark:bg-gray-800/80" aria-label="切换主题"> <svg id="sun-icon" class="h-5 w-5 text-amber-500 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg> <svg id="moon-icon" class="h-5 w-5 text-gray-700 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg> </button>  </body></html> <script defer>
+  (function() {
+    var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
+    var slug = document.querySelector('[data-slug]')?.getAttribute('data-slug');
+    if (!slug) return;
+
+    // ── 1. 浏览量 +1 ──
+    fetch(SUPABASE_URL + '/rest/v1/rpc/increment_views', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_slug: slug })
+    }).then(function(r) { return r.text(); }).then(function(count) {
+      var el = document.querySelector('.views-count');
+      if (el && count) animateCount(el, parseInt(count) || 0);
+    });
+
+    // ── 2. 读取点赞数 ──
+    fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug) + '&select=likes', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data[0]) {
+        var likes = data[0].likes || 0;
+        updateLikeUI(likes, false);
+      }
+    });
+
+    // ── 3. 点赞按钮（心形动画）──
+    var likeBtn = document.querySelector('.like-btn');
+    if (likeBtn) {
+      likeBtn.addEventListener('click', function() {
+        if (likeBtn.classList.contains('liked')) return;
+        fetch(SUPABASE_URL + '/rest/v1/rpc/increment_likes', {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_slug: slug })
+        }).then(function(r) { return r.text(); }).then(function(count) {
+          updateLikeUI(parseInt(count) || 0, true);
+        });
+      });
+    }
+
+    function updateLikeUI(likes, animate) {
+      var lc = document.querySelector('.like-count');
+      var ls = document.querySelector('.likes-count');
+      if (lc) lc.textContent = likes;
+      if (ls) ls.textContent = likes;
+      var btn = document.querySelector('.like-btn');
+      if (!btn) return;
+      if (likes > 0) {
+        btn.classList.add('liked');
+        var outline = btn.querySelector('.heart-outline');
+        var filled = btn.querySelector('.heart-filled');
+        if (outline) outline.style.opacity = '0';
+        if (filled) { filled.style.transform = 'scale(1)'; filled.style.opacity = '1'; }
+        var label = btn.querySelector('.like-label');
+        if (label) label.textContent = '已赞';
+        if (animate) {
+          btn.style.transform = 'scale(1.15)';
+          setTimeout(function() { btn.style.transform = ''; }, 200);
+        }
+      }
+    }
+
+    // 数字递增
+    function animateCount(el, target) {
+      if (!el) return;
+      el.classList.add('stat-loaded');
+      var current = 0;
+      var step = Math.max(1, Math.ceil(target / 20));
+      var timer = setInterval(function() {
+        current += step;
+        if (current >= target) { el.textContent = target; clearInterval(timer); }
+        else { el.textContent = current; }
+      }, 30);
+    }
+
+    // ── 4. Giscus 评论 + 监听评论数 ──
+    window.addEventListener('message', function(event) {
+      if (!event.origin.includes('giscus')) return;
+      if (event.data?.giscus?.discussion) {
+        var d = event.data.giscus.discussion;
+        var count = (d.totalCommentCount || 0) + (d.totalReplyCount || 0);
+        var cc = document.querySelector('.comments-count');
+        if (cc && count != null) cc.textContent = count;
+        fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug), {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ comments: count })
+        });
+      }
+    });
+
+    // Giscus 组件
+    var gs = document.createElement('script');
+    gs.src = 'https://giscus.app/client.js';
+    gs.setAttribute('data-repo', 'jynight/MyBlog');
+    gs.setAttribute('data-repo-id', 'R_kgDOSZJ6kg');
+    gs.setAttribute('data-category', 'General');
+    gs.setAttribute('data-category-id', 'DIC_kwDOSZJ6ks4C8sa_');
+    gs.setAttribute('data-mapping', 'pathname');
+    gs.setAttribute('data-reactions-enabled', '1');
+    gs.setAttribute('data-emit-metadata', '1');
+    gs.setAttribute('data-input-position', 'bottom');
+    gs.setAttribute('data-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    gs.setAttribute('data-lang', 'zh-CN');
+    gs.setAttribute('crossorigin', 'anonymous');
+    gs.async = true;
+    document.querySelector('.giscus')?.appendChild(gs);
+  })();
+</script>  <script defer>
+  // 代码块复制按钮
+  document.querySelectorAll('.prose pre').forEach(function(pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = '复制';
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      navigator.clipboard.writeText(code.textContent || '').then(function() {
+        btn.textContent = '✓ 已复制';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+</script>

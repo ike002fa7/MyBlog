@@ -1,0 +1,373 @@
+<!DOCTYPE html><html lang="zh-CN" class="h-full"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><!-- Baidu Site Verification --><meta name="baidu-site-verification" content="codeva-mapRKQ9fRa"><!-- Primary Meta --><title>Cursor Rules：用规则驱动 AI 编码的最佳实践 | X-ATCN</title><meta name="description" content="深入解析 Cursor Rules 机制，从基础配置到高级规则模板，让你的 AI 编程助手真正理解项目上下文。"><meta name="author" content="Ike Bullen"><link rel="canonical" href="https://www.x-atcn.top/blog/ai-coding-cursor-rules"><!-- Open Graph / Facebook --><meta property="og:type" content="article"><meta property="og:title" content="Cursor Rules：用规则驱动 AI 编码的最佳实践 | X-ATCN"><meta property="og:description" content="深入解析 Cursor Rules 机制，从基础配置到高级规则模板，让你的 AI 编程助手真正理解项目上下文。"><meta property="og:url" content="https://www.x-atcn.top/blog/ai-coding-cursor-rules"><meta property="og:site_name" content="X-ATCN"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://www.x-atcn.top/og-default.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="article:published_time" content="2026-05-10T00:00:00.000Z"><meta property="article:author" content="Ike Bullen"><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Cursor Rules：用规则驱动 AI 编码的最佳实践 | X-ATCN"><meta name="twitter:description" content="深入解析 Cursor Rules 机制，从基础配置到高级规则模板，让你的 AI 编程助手真正理解项目上下文。"><meta name="twitter:image" content="https://www.x-atcn.top/og-default.png"><!-- DNS Preconnect --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"><!-- 暗色模式防闪烁 --><script>
+      (function(){var s=localStorage.getItem('theme');if(s==='dark'||(!s&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})();
+    </script><!-- 页面级 head 注入（JSON-LD 等） --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Cursor Rules：用规则驱动 AI 编码的最佳实践","description":"深入解析 Cursor Rules 机制，从基础配置到高级规则模板，让你的 AI 编程助手真正理解项目上下文。","datePublished":"2026-05-10T00:00:00.000Z","dateModified":"2026-05-10T00:00:00.000Z","author":{"@type":"Person","name":"Ike Bullen","url":"https://www.x-atcn.top/about"},"publisher":{"@type":"Organization","name":"X-ATCN","logo":{"@type":"ImageObject","url":"https://www.x-atcn.top/favicon.svg"}},"url":"https://www.x-atcn.top/blog/ai-coding-cursor-rules","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.x-atcn.top/blog/ai-coding-cursor-rules"},"keywords":"AI, 编程, Cursor, 效率"}</script> <meta name="keywords" content="AI, 编程, Cursor, 效率"><link rel="stylesheet" href="/_astro/about.D7_znXTo.css">
+<style>.liked[data-astro-cid-7jjqptxk] .heart-outline[data-astro-cid-7jjqptxk]{opacity:0}.liked[data-astro-cid-7jjqptxk] .heart-filled[data-astro-cid-7jjqptxk]{transform:scale(1);opacity:1}.prose[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk]{position:relative}.prose[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk]:hover .copy-btn[data-astro-cid-7jjqptxk]{opacity:1}.copy-btn[data-astro-cid-7jjqptxk]{position:absolute;top:8px;right:8px;padding:4px 10px;font-size:11px;font-family:JetBrains Mono,monospace;border-radius:6px;border:1px solid #374151;background:#1f2937;color:#9ca3af;cursor:pointer;opacity:0;transition:opacity .2s}.copy-btn[data-astro-cid-7jjqptxk]:hover{background:#374151;color:#f3f4f6}.copy-btn[data-astro-cid-7jjqptxk].copied{color:#34d399;border-color:#34d399}
+</style><script type="module" src="/_astro/hoisted.CwcBXsj9.js"></script></head> <body class="h-full bg-white text-gray-900 font-sans antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100"> <!-- 滚动进度条 --> <div id="scroll-progress" class="fixed top-0 left-0 z-50 h-0.5 bg-klein transition-[width] duration-150" style="width:0%"></div> <div class="flex min-h-full flex-col"> <header class="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md transition-colors dark:border-gray-800 dark:bg-gray-950/80" id="site-header"> <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4"> <a href="/" class="group flex items-center gap-2 text-xl font-bold tracking-tight"> <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-klein text-sm font-bold text-white transition-transform group-hover:scale-110">X</span> <span class="text-gray-900 transition-colors dark:text-white">X-ATCN</span> </a> <div class="flex items-center gap-2"> <!-- 桌面导航 --> <ul class="hidden gap-1 md:flex"> <li> <a href="/" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"> 首页 </a> </li><li> <a href="/blog" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   bg-klein text-white shadow-sm"> 博客 </a> </li><li> <a href="/about" class="px-3 py-2 text-sm font-bold rounded-lg transition-all
+                   text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"> 关于我 </a> </li> </ul> <!-- 搜索按钮 --> <button id="search-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800" aria-label="搜索" title="搜索 (Ctrl+K)"> <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> </button> <!-- 移动端汉堡按钮 --> <button id="menu-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800" aria-label="菜单"> <svg id="menu-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg> <svg id="menu-close" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> </button> </div> </nav> <!-- 移动端菜单面板 --> <div id="mobile-menu" class="hidden border-t border-gray-100 bg-white px-6 pb-4 pt-2 md:hidden dark:border-gray-800 dark:bg-gray-950"> <ul class="flex flex-col gap-1"> <li> <a href="/" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"> 首页 </a> </li><li> <a href="/blog" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 bg-klein text-white"> 博客 </a> </li><li> <a href="/about" class="block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
+                 text-gray-500 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800"> 关于我 </a> </li> </ul> </div> </header> <!-- 搜索弹窗 --> <div id="search-overlay" class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 pt-[15vh] backdrop-blur-sm"> <div class="mx-4 w-full max-w-xl rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900"> <div class="flex items-center border-b border-gray-100 px-4 dark:border-gray-700"> <svg class="h-5 w-5 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> <input id="search-input" type="text" placeholder="搜索文章…" class="w-full bg-transparent px-3 py-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500" autofocus> <kbd class="hidden rounded border border-gray-200 px-1.5 py-0.5 font-mono text-[10px] text-gray-400 sm:inline-block dark:border-gray-600">Esc</kbd> </div> <div id="search-results" class="max-h-72 overflow-y-auto p-2"> <p class="px-3 py-6 text-center text-sm text-gray-400">输入关键词搜索文章标题和摘要</p> </div> </div> </div>  <main class="flex-1 flex flex-col">  <article class="mx-auto w-full max-w-6xl px-6 py-12 md:py-16" data-astro-cid-7jjqptxk> <!-- 文章头部 --> <header class="mb-10" data-astro-cid-7jjqptxk> <div class="mb-5 flex flex-wrap gap-2 items-center" data-astro-cid-7jjqptxk> <span class="rounded-full bg-klein/10 px-3 py-1 font-mono text-xs font-medium text-klein border border-klein/20 dark:bg-klein/20 dark:border-klein/40 dark:text-klein-300" data-astro-cid-7jjqptxk>节点</span> <span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#AI</span><span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#编程</span><span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#Cursor</span><span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300" data-astro-cid-7jjqptxk>#效率</span> </div> <h1 class="text-4xl font-extrabold leading-tight tracking-tight text-gray-900 md:text-5xl dark:text-white" data-astro-cid-7jjqptxk>Cursor Rules：用规则驱动 AI 编码的最佳实践</h1> <div class="mt-6 flex flex-wrap items-center gap-4" data-astro-cid-7jjqptxk> <time class="inline-flex items-center gap-2 font-mono text-sm text-gray-400 dark:text-gray-500" data-astro-cid-7jjqptxk> <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" data-astro-cid-7jjqptxk></path></svg> 2026年5月10日 </time> <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" data-astro-cid-7jjqptxk></span> <span class="stats-counter inline-flex items-center gap-3 font-mono text-xs text-gray-400 dark:text-gray-500" data-slug="ai-coding-cursor-rules" data-astro-cid-7jjqptxk> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" data-astro-cid-7jjqptxk></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" data-astro-cid-7jjqptxk></path></svg><span class="views-count" data-astro-cid-7jjqptxk>--</span></span> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg><span class="likes-count" data-astro-cid-7jjqptxk>--</span></span> <span class="inline-flex items-center gap-1" data-astro-cid-7jjqptxk><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" data-astro-cid-7jjqptxk></path></svg><span class="comments-count" data-astro-cid-7jjqptxk>--</span></span> </span> </div> </header> <!-- 文章正文 --> <div class="prose prose-lg prose-gray max-w-none dark:prose-invert" data-astro-cid-7jjqptxk> <h2 id="为什么你的-ai-写代码总是差一点">为什么你的 AI 写代码总是差一点？</h2>
+<p>相信很多开发者都有这样的体验：让 AI 帮你写一段代码，功能是对了，但——命名风格不一致、用了你不喜欢的库、缺少错误处理、甚至忽略了项目已有的工具函数。你不得不花大量时间在 Prompt 里反复强调：“请用 TypeScript 严格模式”、“别用 any”、“错误要用 Result 类型返回”……</p>
+<p>这些”重复的唠叨”正是 <strong>Cursor Rules</strong> 要解决的问题。</p>
+<h2 id="cursor-rules-是什么">Cursor Rules 是什么？</h2>
+<p>Cursor Rules 是 Cursor 编辑器提供的一套<strong>项目级 AI 行为配置机制</strong>。通过在项目根目录创建规则文件，你可以为 AI 编码助手预设编码规范、技术栈偏好、项目约定等上下文信息。AI 在生成代码时，会始终遵循这些规则。</p>
+<p>简单来说：<strong>把”每次都要解释一遍的东西”写进规则文件，一劳永逸。</strong></p>
+<p>从 Cursor 0.45+ 版本开始，有两种规则配置方式：</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>方式</th><th>文件</th><th>特点</th></tr></thead><tbody><tr><td>传统模式</td><td><code>.cursorrules</code></td><td>单文件，所有规则集中管理</td></tr><tr><td>新模式 (推荐)</td><td><code>.cursor/rules/*.mdc</code></td><td>多文件，按场景分组，支持 glob 匹配</td></tr></tbody></table>
+<h2 id="快速上手创建你的第一个规则文件">快速上手：创建你的第一个规则文件</h2>
+<h3 id="基础版本--cursorrules">基础版本 — .cursorrules</h3>
+<p>在项目根目录创建 <code>.cursorrules</code> 文件：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">## 项目概述</span></span>
+<span class="line"><span style="color:#E1E4E8">这是一个 Next.js 14 + TypeScript 的全栈博客项目，使用 Prisma 作为 ORM，</span></span>
+<span class="line"><span style="color:#E1E4E8">Tailwind CSS 作为样式方案。</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 编码规范</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 使用 TypeScript 严格模式，禁止使用 </span><span style="color:#79B8FF">`any`</span><span style="color:#E1E4E8"> 类型</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 函数必须显式声明返回类型</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 使用 </span><span style="color:#79B8FF">`async/await`</span><span style="color:#E1E4E8"> 而非 Promise 链式调用</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 命名规范：组件用 PascalCase，函数用 camelCase，常量用 UPPER_SNAKE_CASE</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 项目约定</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> API 路由放在 </span><span style="color:#79B8FF">`app/api/`</span><span style="color:#E1E4E8"> 下，使用 Next.js Route Handlers</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 数据库查询统一通过 </span><span style="color:#79B8FF">`lib/db.ts`</span><span style="color:#E1E4E8"> 中的 Prisma 客户端</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 所有 API 返回值使用 </span><span style="color:#79B8FF">`{ success: boolean, data?: T, error?: string }`</span><span style="color:#E1E4E8"> 格式</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 错误处理使用 </span><span style="color:#79B8FF">`lib/errors.ts`</span><span style="color:#E1E4E8"> 中的自定义错误类</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## 偏好</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 状态管理优先使用 React Context + useReducer，避免引入 Redux</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 日期处理使用 </span><span style="color:#79B8FF">`date-fns`</span><span style="color:#E1E4E8">，不要使用 moment.js</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 测试使用 Vitest + React Testing Library</span></span>
+<span class="line"></span></code></pre>
+<p>保存后，Cursor Agent 在所有对话中都会遵循这些约定。例如，当你请求”创建一个用户登录 API”时，AI 会自动使用 Next.js Route Handlers、Prisma 查询、并返回项目标准格式的响应。</p>
+<h3 id="进阶版本--cursorrules-目录">进阶版本 — .cursor/rules/ 目录</h3>
+<p>新版本推荐使用多文件结构，每个规则文件可以用 <strong>frontmatter</strong> 控制生效条件：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>.cursor/rules/</span></span>
+<span class="line"><span>├── global.mdc          # 全局规则，始终生效</span></span>
+<span class="line"><span>├── react-components.mdc # React 组件规范</span></span>
+<span class="line"><span>├── api-routes.mdc      # API 路由规范</span></span>
+<span class="line"><span>├── testing.mdc         # 测试规范</span></span>
+<span class="line"><span>└── database.mdc        # 数据库查询规范</span></span>
+<span class="line"><span></span></span></code></pre>
+<p>每个 <code>.mdc</code> 文件支持 frontmatter 元数据：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">description: React 组件编码规范</span></span>
+<span class="line"><span style="color:#E1E4E8">globs: ["</span><span style="color:#E1E4E8;font-weight:bold">**/</span><span style="color:#E1E4E8;font-style:italic">*.tsx", "**</span><span style="color:#E1E4E8;font-weight:bold">/*.jsx"]</span></span>
+<span class="line"><span style="color:#E1E4E8">alwaysApply: true</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## React 组件规范</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 优先使用函数组件 + Hooks</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Props 类型必须独立定义 interface，命名为 </span><span style="color:#79B8FF">`ComponentNameProps`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 组件导出使用 named export，避免 default export</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 使用 </span><span style="color:#79B8FF">`clsx`</span><span style="color:#E1E4E8"> 或 </span><span style="color:#79B8FF">`cn()`</span><span style="color:#E1E4E8"> 工具函数拼接 className</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 条件渲染优先使用三元运算符或 </span><span style="color:#79B8FF">`&#x26;&#x26;`</span><span style="color:#E1E4E8">，复杂逻辑提取为变量</span></span>
+<span class="line"></span></code></pre>
+<p>关键字段说明：</p>
+<ul>
+<li><strong><code>globs</code></strong>：指定规则适用的文件类型，AI 编辑匹配文件时自动激活</li>
+<li><strong><code>alwaysApply</code></strong>：设为 <code>true</code> 时规则始终生效</li>
+<li><strong><code>description</code></strong>：描述规则用途，方便团队理解</li>
+</ul>
+<h2 id="不同项目类型的最佳规则示例">不同项目类型的最佳规则示例</h2>
+<h3 id="1-前端-react-项目">1. 前端 React 项目</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">globs: ["</span><span style="color:#E1E4E8;font-weight:bold">**/</span><span style="color:#E1E4E8;font-style:italic">*.tsx", "**</span><span style="color:#E1E4E8;font-weight:bold">/*.ts"]</span></span>
+<span class="line"><span style="color:#E1E4E8">alwaysApply: false</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## React + TypeScript 规范</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 状态管理：简单状态用 </span><span style="color:#79B8FF">`useState`</span><span style="color:#E1E4E8">，复杂状态用 </span><span style="color:#79B8FF">`useReducer`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 服务端数据获取统一使用 TanStack Query (React Query)</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 表单处理使用 React Hook Form + Zod 校验</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 组件拆分原则：单一职责，超过 150 行考虑拆分</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> CSS 方案：Tailwind CSS，复杂样式提取为 </span><span style="color:#79B8FF">`@apply`</span><span style="color:#E1E4E8"> 或 CSS Module</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 避免在 </span><span style="color:#79B8FF">`useEffect`</span><span style="color:#E1E4E8"> 中直接调用异步函数，封装为命名函数</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 图片使用 Next.js </span><span style="color:#79B8FF">`Image`</span><span style="color:#E1E4E8"> 组件，设置合理的 width/height</span></span>
+<span class="line"></span></code></pre>
+<h3 id="2-nodejs-后端项目">2. Node.js 后端项目</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">globs: [</span><span style="color:#DBEDFF;text-decoration:underline">"**/*.ts"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">alwaysApply: true</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Node.js 后端规范</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 使用 Fastify 作为 HTTP 框架</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 所有路由处理函数必须包含 try-catch 错误处理</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 敏感信息通过环境变量读取，使用 </span><span style="color:#79B8FF">`env.ts`</span><span style="color:#E1E4E8"> 统一导出</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> API 响应格式：</span><span style="color:#79B8FF">`{ code: number, message: string, data: T | null }`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 日志使用 </span><span style="color:#79B8FF">`pino`</span><span style="color:#E1E4E8">，不要使用 </span><span style="color:#79B8FF">`console.log`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 数据库迁移使用 Drizzle ORM，迁移文件纳入版本控制</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 所有外部 API 调用设置 10 秒超时</span></span>
+<span class="line"></span></code></pre>
+<h3 id="3-python-数据科学项目">3. Python 数据科学项目</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">globs: [</span><span style="color:#DBEDFF;text-decoration:underline">"**/*.py"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">alwaysApply: true</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## Python 数据科学规范</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 类型注解：所有公共函数必须包含完整类型注解</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 数据处理：Pandas DataFrame 操作优先使用链式调用</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 可视化：统一使用 Plotly Express，不用 matplotlib.pyplot</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 实验管理：使用 MLflow 记录参数、指标和模型</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 代码格式：遵循 Black 格式化规则，行宽 100</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 导入顺序：标准库 → 第三方库 → 本地模块</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Notebook 开发后必须提取为 </span><span style="color:#79B8FF">`.py`</span><span style="color:#E1E4E8"> 模块</span></span>
+<span class="line"></span></code></pre>
+<h3 id="4-全栈-t3-项目">4. 全栈 T3 项目</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"><span style="color:#E1E4E8">globs: ["</span><span style="color:#E1E4E8;font-weight:bold">**/</span><span style="color:#E1E4E8;font-style:italic">*.ts", "**</span><span style="color:#E1E4E8;font-weight:bold">/*.tsx"]</span></span>
+<span class="line"><span style="color:#E1E4E8">alwaysApply: true</span></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">---</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF;font-weight:bold">## T3 Stack 规范</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 数据库操作统一放在 </span><span style="color:#79B8FF">`server/api/routers/`</span><span style="color:#E1E4E8"> 下的 tRPC router 中</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 前端使用 tRPC 的 typed client，禁止直接 fetch API</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 认证使用 NextAuth.js，通过 </span><span style="color:#79B8FF">`getServerAuthSession`</span><span style="color:#E1E4E8"> 获取会话</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 环境变量校验使用 </span><span style="color:#79B8FF">`@t3-oss/env-nextjs`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> Prisma schema 变更后运行 </span><span style="color:#79B8FF">`npx prisma generate`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 文件上传使用 UploadThing</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 全局类型定义放在 </span><span style="color:#79B8FF">`src/types/`</span><span style="color:#E1E4E8"> 目录</span></span>
+<span class="line"></span></code></pre>
+<h2 id="提升-ai-代码质量的进阶技巧">提升 AI 代码质量的进阶技巧</h2>
+<h3 id="1-给出反例">1. 给出反例</h3>
+<p>不只说”要做什么”，也要说”不要做什么”：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">## 禁止事项</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> ❌ 不要在组件中直接操作 DOM（使用 React ref 代替）</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> ❌ 不要使用 </span><span style="color:#79B8FF">`@ts-ignore`</span><span style="color:#E1E4E8"> 或 </span><span style="color:#79B8FF">`@ts-expect-error`</span><span style="color:#E1E4E8">（修复类型错误）</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> ❌ 不要在 useEffect 中忘记清理副作用</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> ❌ 不要使用 </span><span style="color:#79B8FF">`index`</span><span style="color:#E1E4E8"> 作为 React key</span></span>
+<span class="line"></span></code></pre>
+<h3 id="2-提供代码模板">2. 提供代码模板</h3>
+<p>给出项目中的常用模式，AI 会自动套用：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">## API Handler 模板</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">所有 API 路由按以下模板编写：</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">```typescript</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { NextRequest, NextResponse } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "next/server"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { prisma } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@/lib/db"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { AppError } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@/lib/errors"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { getServerSession } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@/lib/auth"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> POST</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">req</span><span style="color:#F97583">:</span><span style="color:#B392F0"> NextRequest</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  try</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> session</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> getServerSession</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">session) {</span></span>
+<span class="line"><span style="color:#F97583">      return</span><span style="color:#E1E4E8"> NextResponse.</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        { success: </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">, error: </span><span style="color:#9ECBFF">"Unauthorized"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">        { status: </span><span style="color:#79B8FF">401</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">      );</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#6A737D">    // 业务逻辑...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> NextResponse.</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">({ success: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">, data: result });</span></span>
+<span class="line"><span style="color:#E1E4E8">  } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (error </span><span style="color:#F97583">instanceof</span><span style="color:#B392F0"> AppError</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">      return</span><span style="color:#E1E4E8"> NextResponse.</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">        { success: </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">, error: error.message },</span></span>
+<span class="line"><span style="color:#E1E4E8">        { status: error.statusCode }</span></span>
+<span class="line"><span style="color:#E1E4E8">      );</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">    console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Unexpected error:"</span><span style="color:#E1E4E8">, error);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> NextResponse.</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">      { success: </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">, error: </span><span style="color:#9ECBFF">"Internal Server Error"</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">      { status: </span><span style="color:#79B8FF">500</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span></span></span>
+<span class="line"><span>### 3. 利用 Glob 模式精细控制</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>```markdown</span></span>
+<span class="line"><span># 仅对 API 路由文件生效</span></span>
+<span class="line"><span>---</span></span>
+<span class="line"><span>globs: ["app/api/**/*.ts"]</span></span>
+<span class="line"><span>---</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span># 仅对测试文件生效</span></span>
+<span class="line"><span>---</span></span>
+<span class="line"><span>globs: ["**/*.test.ts", "**/*.spec.ts"]</span></span>
+<span class="line"><span>---</span></span>
+<span class="line"><span></span></span></code></pre>
+<h3 id="4-链接项目文档">4. 链接项目文档</h3>
+<p>在规则中引用项目的重要文档：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="markdown"><code><span class="line"><span style="color:#79B8FF;font-weight:bold">## 重要参考</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 架构设计：参见 </span><span style="color:#79B8FF">`docs/ARCHITECTURE.md`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> API 文档：参见 </span><span style="color:#79B8FF">`docs/API.md`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 数据库 Schema：参见 </span><span style="color:#79B8FF">`prisma/schema.prisma`</span></span>
+<span class="line"><span style="color:#FFAB70">-</span><span style="color:#E1E4E8"> 组件库：参见 </span><span style="color:#79B8FF">`docs/COMPONENTS.md`</span></span>
+<span class="line"></span></code></pre>
+<h2 id="常见问题与陷阱">常见问题与陷阱</h2>
+<h3 id="q-规则太长会影响-ai-性能吗">Q: 规则太长会影响 AI 性能吗？</h3>
+<p>会的。建议单个规则文件控制在 <strong>300-500 行以内</strong>。如果项目约定很多，拆分为多个 <code>.mdc</code> 文件，通过 glob 匹配按需加载。AI 的上下文窗口虽大，但精简的指令能获得更精准的响应。</p>
+<h3 id="q-规则之间冲突了怎么办">Q: 规则之间冲突了怎么办？</h3>
+<p>如果有多个规则同时匹配一个文件，AI 会合并所有规则。冲突时，通常<strong>后加载的规则优先级更高</strong>。建议避免在多个文件中定义矛盾的指令。</p>
+<h3 id="q-规则对-cursor-tab自动补全也生效吗">Q: 规则对 Cursor Tab（自动补全）也生效吗？</h3>
+<p>Rules 主要影响 Chat 和 Agent 模式的生成结果，对 Tab 内联补全的影响有限。Tab 补全更多依赖上下文窗口中的代码模式。</p>
+<h3 id="q-团队共享规则如何管理">Q: 团队共享规则如何管理？</h3>
+<p>将 <code>.cursorrules</code> 或 <code>.cursor/rules/</code> 目录纳入 Git 版本控制，团队成员 clone 项目后自动生效。可以在 <code>README.md</code> 中说明规则文件的作用，帮助新成员理解。</p>
+<h2 id="总结">总结</h2>
+<p>Cursor Rules 本质上是<strong>将隐式的开发约定显式化</strong>。一个好的规则文件能带来：</p>
+<ol>
+<li><strong>一致性</strong> — 团队所有成员 + AI 遵循同一套标准</li>
+<li><strong>效率</strong> — 减少反复纠正 AI 的时间，一次配置持续生效</li>
+<li><strong>质量</strong> — AI 生成的代码更贴近项目实际需求</li>
+<li><strong>可维护性</strong> — 项目约定集中管理，新人上手更快</li>
+</ol>
+<p>建议从一个小而精的 <code>.cursorrules</code> 开始，随着项目发展逐步补充。<strong>好的规则不是写得越多越好，而是写得越对越好。</strong></p>
+<blockquote>
+<p>延伸阅读：<a href="https://docs.cursor.com/context/rules-for-ai">Cursor Rules 官方文档</a></p>
+</blockquote> </div> <!-- 底部交互栏 --> <div class="mt-16 flex items-center justify-between border-t border-gray-100 pt-8 dark:border-gray-800" data-astro-cid-7jjqptxk> <button class="like-btn group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl border border-gray-200 px-5 py-2.5 font-mono text-sm text-gray-500 transition-all hover:border-klein/40 hover:text-klein dark:border-gray-700 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-slug="ai-coding-cursor-rules" data-astro-cid-7jjqptxk> <!-- 心形图标动画 --> <span class="like-icon relative flex h-5 w-5 items-center justify-center" data-astro-cid-7jjqptxk> <svg class="heart-outline absolute transition-all group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg> <svg class="heart-filled absolute scale-0 opacity-0 transition-all" fill="#002FA7" stroke="#002FA7" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" data-astro-cid-7jjqptxk></path></svg> </span> <span class="like-label" data-astro-cid-7jjqptxk>点赞</span> <span class="like-count font-semibold" data-astro-cid-7jjqptxk>--</span> </button> <a href="/blog" class="inline-flex items-center gap-1 font-mono text-sm text-gray-400 transition-colors hover:text-klein dark:text-gray-500 dark:hover:text-klein-300" data-astro-cid-7jjqptxk> <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" data-astro-cid-7jjqptxk><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" data-astro-cid-7jjqptxk></path></svg>
+返回列表
+</a> </div> <!-- Giscus 评论区 --> <div class="giscus mt-12" data-slug="ai-coding-cursor-rules" data-astro-cid-7jjqptxk></div> </article> </main> <footer class="border-t border-gray-100 py-4 dark:border-gray-800"> <div class="mx-auto max-w-6xl px-6"> <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-between"> <div class="flex items-center gap-2 text-sm text-gray-400 dark:text-gray-500"> <span class="flex h-6 w-6 items-center justify-center rounded bg-klein text-xs font-bold text-white">X</span> <span>&copy; 2026 X-ATCN</span> </div> <div class="text-sm text-gray-400 dark:text-gray-500">Ike Bullen × Klein Blue</div> </div> </div> </footer> </div> <!-- 暗色模式切换按钮 --> <button id="theme-toggle" class="fixed bottom-6 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 shadow-lg backdrop-blur transition-all hover:scale-110 dark:border-gray-700 dark:bg-gray-800/80" aria-label="切换主题"> <svg id="sun-icon" class="h-5 w-5 text-amber-500 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg> <svg id="moon-icon" class="h-5 w-5 text-gray-700 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg> </button>  </body></html> <script defer>
+  (function() {
+    var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
+    var slug = document.querySelector('[data-slug]')?.getAttribute('data-slug');
+    if (!slug) return;
+
+    // ── 1. 浏览量 +1 ──
+    fetch(SUPABASE_URL + '/rest/v1/rpc/increment_views', {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_slug: slug })
+    }).then(function(r) { return r.text(); }).then(function(count) {
+      var el = document.querySelector('.views-count');
+      if (el && count) animateCount(el, parseInt(count) || 0);
+    });
+
+    // ── 2. 读取点赞数 ──
+    fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug) + '&select=likes', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    }).then(function(r) { return r.json(); }).then(function(data) {
+      if (data[0]) {
+        var likes = data[0].likes || 0;
+        updateLikeUI(likes, false);
+      }
+    });
+
+    // ── 3. 点赞按钮（心形动画）──
+    var likeBtn = document.querySelector('.like-btn');
+    if (likeBtn) {
+      likeBtn.addEventListener('click', function() {
+        if (likeBtn.classList.contains('liked')) return;
+        fetch(SUPABASE_URL + '/rest/v1/rpc/increment_likes', {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_slug: slug })
+        }).then(function(r) { return r.text(); }).then(function(count) {
+          updateLikeUI(parseInt(count) || 0, true);
+        });
+      });
+    }
+
+    function updateLikeUI(likes, animate) {
+      var lc = document.querySelector('.like-count');
+      var ls = document.querySelector('.likes-count');
+      if (lc) lc.textContent = likes;
+      if (ls) ls.textContent = likes;
+      var btn = document.querySelector('.like-btn');
+      if (!btn) return;
+      if (likes > 0) {
+        btn.classList.add('liked');
+        var outline = btn.querySelector('.heart-outline');
+        var filled = btn.querySelector('.heart-filled');
+        if (outline) outline.style.opacity = '0';
+        if (filled) { filled.style.transform = 'scale(1)'; filled.style.opacity = '1'; }
+        var label = btn.querySelector('.like-label');
+        if (label) label.textContent = '已赞';
+        if (animate) {
+          btn.style.transform = 'scale(1.15)';
+          setTimeout(function() { btn.style.transform = ''; }, 200);
+        }
+      }
+    }
+
+    // 数字递增
+    function animateCount(el, target) {
+      if (!el) return;
+      el.classList.add('stat-loaded');
+      var current = 0;
+      var step = Math.max(1, Math.ceil(target / 20));
+      var timer = setInterval(function() {
+        current += step;
+        if (current >= target) { el.textContent = target; clearInterval(timer); }
+        else { el.textContent = current; }
+      }, 30);
+    }
+
+    // ── 4. Giscus 评论 + 监听评论数 ──
+    window.addEventListener('message', function(event) {
+      if (!event.origin.includes('giscus')) return;
+      if (event.data?.giscus?.discussion) {
+        var d = event.data.giscus.discussion;
+        var count = (d.totalCommentCount || 0) + (d.totalReplyCount || 0);
+        var cc = document.querySelector('.comments-count');
+        if (cc && count != null) cc.textContent = count;
+        fetch(SUPABASE_URL + '/rest/v1/blog_stats?slug=eq.' + encodeURIComponent(slug), {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ comments: count })
+        });
+      }
+    });
+
+    // Giscus 组件
+    var gs = document.createElement('script');
+    gs.src = 'https://giscus.app/client.js';
+    gs.setAttribute('data-repo', 'jynight/MyBlog');
+    gs.setAttribute('data-repo-id', 'R_kgDOSZJ6kg');
+    gs.setAttribute('data-category', 'General');
+    gs.setAttribute('data-category-id', 'DIC_kwDOSZJ6ks4C8sa_');
+    gs.setAttribute('data-mapping', 'pathname');
+    gs.setAttribute('data-reactions-enabled', '1');
+    gs.setAttribute('data-emit-metadata', '1');
+    gs.setAttribute('data-input-position', 'bottom');
+    gs.setAttribute('data-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    gs.setAttribute('data-lang', 'zh-CN');
+    gs.setAttribute('crossorigin', 'anonymous');
+    gs.async = true;
+    document.querySelector('.giscus')?.appendChild(gs);
+  })();
+</script>  <script defer>
+  // 代码块复制按钮
+  document.querySelectorAll('.prose pre').forEach(function(pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = '复制';
+    btn.addEventListener('click', function() {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      navigator.clipboard.writeText(code.textContent || '').then(function() {
+        btn.textContent = '✓ 已复制';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+</script>
