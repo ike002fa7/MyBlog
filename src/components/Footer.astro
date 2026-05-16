@@ -5,7 +5,19 @@
         <span class="flex h-6 w-6 items-center justify-center rounded bg-klein text-xs font-bold text-white">X</span>
         <span>&copy; {new Date().getFullYear()} X-ATCN</span>
       </div>
-      <div class="text-sm text-gray-400 dark:text-gray-500">Ike Bullen × Klein Blue</div>
+      <div class="text-sm text-gray-400 dark:text-gray-500 font-mono">已运行 <span id="uptime-days">--</span> 天</div>
+      <div class="text-sm text-gray-400 dark:text-gray-500">Ike Bullen &times; Klein Blue</div>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  (function() {
+    var start = new Date('2026-05-01T00:00:00+08:00');
+    var now = new Date();
+    var diff = now.getTime() - start.getTime();
+    var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    var el = document.getElementById('uptime-days');
+    if (el) el.textContent = days;
+  })();
+</script>
