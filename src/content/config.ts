@@ -5,7 +5,7 @@ const blog = defineCollection({
     title: z.string(),
     date: z.date(),
     excerpt: z.string().optional(),
-    category: z.enum(['nod', 'ter', 'wrk', 'ker', 'ovf']).optional().default('ovf'),
+    category: z.string().optional().default('ovf'),
     tags: z.array(z.string()).optional(),
   }),
 });

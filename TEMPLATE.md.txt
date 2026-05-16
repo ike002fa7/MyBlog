@@ -1,0 +1,37 @@
+---
+title: "文章标题"
+date: 2026-05-16
+category: "ovf"
+categoryName: "分类中文名"
+excerpt: "文章摘要，会显示在文章卡片和搜索结果的描述中"
+tags: ["标签1", "标签2"]
+# cover: "https://example.com/cover.jpg"  # 可选，文章封面图
+---
+
+## 这里写二级标题
+
+正文内容，支持完整的 Markdown 语法。
+
+### 三级标题
+
+- 列表项
+- 列表项
+
+**加粗**、*斜体*、~~删除线~~、`行内代码`
+
+```python
+# 代码块
+print("Hello, Klein Blue!")
+```
+
+> 引用文本
+
+---
+
+图片引用方式（放在 `public/` 目录下）：
+
+![图片描述](/your-image.png)
+
+或者使用外链：
+
+![图片描述](https://example.com/image.jpg)
