@@ -16,6 +16,8 @@ const catLabel = {
 };
 ---
 <BaseLayout title="博客" currentPath="/blog">
+  <!-- 注入当前博客所有文章 slug 列表，用于统计过滤 -->
+  <script is:inline set:html={`window.__BLOG_SLUGS = [${posts.map((p) => JSON.stringify(p.slug)).join(',')}];`}></script>
   <div class="mx-auto w-full max-w-6xl px-6 py-16 md:py-20">
     <div class="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
@@ -81,7 +83,12 @@ const catLabel = {
   (function() {
     var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
     var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
-    fetch(SUPABASE_URL + '/rest/v1/blog_stats?select=views,likes,comments', {
+
+    // 只查询当前博客存在的文章
+    var slugs = window.__BLOG_SLUGS || [];
+    if (slugs.length === 0) return;
+    var orFilter = slugs.map(function(s) { return 'slug.eq.' + encodeURIComponent(s); }).join(',');
+    fetch(SUPABASE_URL + '/rest/v1/blog_stats?select=views,likes,comments&or=(' + orFilter + ')', {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
     }).then(function(r) { return r.json(); }).then(function(rows) {
       var totalViews = 0, totalLikes = 0, totalComments = 0;
