@@ -4,12 +4,12 @@ const { limit = 4 } = Astro.props;
 
 // 分类配置：slug → 显示名（中文名 / 英文缩写）
 const categories = [
-  { slug: '全部', label: '全部 / all' },
-  { slug: 'nod', label: '节点 / nod' },
-  { slug: 'ter', label: '终端 / ter' },
-  { slug: 'wrk', label: '工作台 / wrk' },
-  { slug: 'ker', label: '内核 / ker' },
-  { slug: 'ovf', label: '溢出 / ovf' },
+  { slug: '全部', label: '全部 / all', tip: '聚合所有维度的内容与思考' },
+  { slug: 'nod', label: '节点 / nod', tip: '构成数字世界的底层基础设施与计算力' },
+  { slug: 'ter', label: '终端 / ter', tip: '人与数字世界交互的物理边界' },
+  { slug: 'wrk', label: '工作台 / wrk', tip: '个人数字环境的构建与秩序' },
+  { slug: 'ker', label: '内核 / ker', tip: '驱动一切运转的底层思维逻辑和个人沉淀' },
+  { slug: 'ovf', label: '溢出 / ovf', tip: '无规则的蔓延' },
 ];
 ---
 
@@ -24,6 +24,7 @@ const categories = [
           : 'border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300'
       ]}
       data-cat={cat.slug}
+      title={cat.tip}
     >{cat.label}</button>
   ))}
 </div>
