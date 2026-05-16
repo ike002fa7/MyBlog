@@ -71,7 +71,7 @@ const catLabel = {
 <!-- 定位到分类栏按钮（仅博客页面） -->
 <button id="scroll-to-category" class="fixed bottom-24 right-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white/80 shadow-lg backdrop-blur transition-all hover:scale-110 dark:border-gray-700 dark:bg-gray-800/80" aria-label="定位到分类栏" title="定位到分类栏">
   <svg class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7l5-5 5 5M7 17l5 5 5-5"/>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
   </svg>
 </button>
 
@@ -107,8 +107,7 @@ const catLabel = {
     var btn = document.getElementById('scroll-to-category');
     if (!btn) return;
     btn.addEventListener('click', function() {
-      var bar = document.getElementById('category-bar');
-      if (bar) bar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   })();
 </script>
