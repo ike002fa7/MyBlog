@@ -10,10 +10,10 @@
       <svg class="toc-chevron h-3.5 w-3.5 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
       </svg>
-      <span class="font-semibold tracking-wider"># 目录</span>
+      <span class="font-semibold tracking-wider">目录</span>
       <span class="toc-count ml-1 rounded bg-gray-100 px-1.5 py-0.5 text-[10px] dark:bg-gray-800"></span>
     </summary>
-    <nav class="toc-nav border-l-2 border-gray-200 pl-4 dark:border-gray-700">
+    <nav class="toc-nav flex flex-wrap gap-1.5">
       <!-- 由 JS 动态填充 -->
     </nav>
   </details>
@@ -22,19 +22,6 @@
 <style>
   .toc-wrapper {
     scroll-margin-top: 2rem;
-  }
-  .toc-nav {
-    max-height: 60vh;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #002FA7 transparent;
-  }
-  .toc-nav::-webkit-scrollbar {
-    width: 4px;
-  }
-  .toc-nav::-webkit-scrollbar-thumb {
-    background: #002FA7;
-    border-radius: 2px;
   }
 </style>
 
@@ -79,31 +66,33 @@
       a.href = '#' + item.id;
       a.textContent = item.text;
       a.setAttribute('data-target', item.id);
-      // 直接内联样式，避免 astro scoped css 不匹配
-      a.style.display = 'block';
-      a.style.padding = '3px 0';
+      // 直接内联样式 — 横向标签式
+      a.style.display = 'inline-block';
+      a.style.padding = '4px 12px';
+      a.style.margin = '2px 0';
       a.style.fontFamily = "'Microsoft YaHei', '微软雅黑', sans-serif";
       a.style.fontSize = '13px';
       a.style.lineHeight = '1.5';
       a.style.color = defaultColor;
       a.style.textDecoration = 'none';
+      a.style.borderRadius = '6px';
+      a.style.border = '1px solid transparent';
+      a.style.backgroundColor = 'transparent';
       a.style.transition = 'all .15s ease';
-      a.style.borderLeft = '2px solid transparent';
-      a.style.marginLeft = '-18px';
-      a.style.paddingLeft = '16px';
       if (item.tag === 'h3') {
-        a.style.paddingLeft = '32px';
         a.style.fontSize = '12px';
         a.style.color = h3Color;
       }
-      // hover 效果用 mouseenter/mouseleave
+      // hover 效果
       a.addEventListener('mouseenter', function() {
         this.style.color = hoverColor;
-        this.style.borderLeftColor = hoverColor;
+        this.style.backgroundColor = isDark ? 'rgba(26,103,255,0.1)' : 'rgba(0,47,167,0.08)';
+        this.style.borderColor = isDark ? 'rgba(26,103,255,0.3)' : 'rgba(0,47,167,0.2)';
       });
       a.addEventListener('mouseleave', function() {
         this.style.color = item.tag === 'h3' ? h3Color : defaultColor;
-        this.style.borderLeftColor = 'transparent';
+        this.style.backgroundColor = 'transparent';
+        this.style.borderColor = 'transparent';
       });
       // 点击平滑滚动
       a.addEventListener('click', function(e) {
@@ -135,12 +124,14 @@
         var target = link.getAttribute('data-target');
         if (target === activeId) {
           link.style.color = hoverColor;
-          link.style.borderLeftColor = hoverColor;
+          link.style.backgroundColor = isDark ? 'rgba(26,103,255,0.15)' : 'rgba(0,47,167,0.1)';
+          link.style.borderColor = isDark ? 'rgba(26,103,255,0.4)' : 'rgba(0,47,167,0.3)';
           link.style.fontWeight = '600';
         } else {
           var isH3 = items.find(function(i) { return i.id === target; })?.tag === 'h3';
           link.style.color = isH3 ? h3Color : defaultColor;
-          link.style.borderLeftColor = 'transparent';
+          link.style.backgroundColor = 'transparent';
+          link.style.borderColor = 'transparent';
           link.style.fontWeight = 'normal';
         }
       });
