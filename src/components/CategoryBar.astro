@@ -27,10 +27,10 @@ const categories = [
         data-cat={cat.slug}
       >{cat.label}</button>
       <!-- 自定义 Tooltip -->
-      <div class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1A1A1A] px-3 py-1.5 text-xs text-white opacity-0 shadow-lg transition-all duration-200 ease-out group-hover:opacity-100 group-hover:delay-150 dark:bg-gray-100 dark:text-gray-900">
+      <div class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded px-2.5 py-1 text-xs font-normal tracking-wide text-[#D1D5DB] opacity-0 shadow-lg shadow-black/10 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:delay-150" style="background:rgba(24,24,27,0.85);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.08);box-shadow:0 4px 12px rgba(0,0,0,0.12)">
         {cat.tip}
         <!-- 小三角箭头 -->
-        <div class="absolute bottom-full left-1/2 -ml-1 h-2 w-2 -translate-y-px rotate-45 bg-[#1A1A1A] dark:bg-gray-100"></div>
+        <div class="absolute bottom-full left-1/2 -ml-1 h-1.5 w-1.5 -translate-y-px rotate-45" style="background:rgba(24,24,27,0.85);border:1px solid rgba(255,255,255,0.08);border-right:none;border-bottom:none;"></div>
       </div>
     </div>
   ))}
