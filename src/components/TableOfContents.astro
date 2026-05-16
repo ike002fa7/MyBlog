@@ -36,47 +36,6 @@
     background: #002FA7;
     border-radius: 2px;
   }
-  .toc-nav a {
-    display: block;
-    padding: 3px 0;
-    font-family: 'JetBrains Mono', 'Inter', monospace;
-    font-size: 13px;
-    line-height: 1.5;
-    color: #6b7280;
-    text-decoration: none;
-    transition: all 0.15s ease;
-    border-left: 2px solid transparent;
-    margin-left: -18px;
-    padding-left: 16px;
-  }
-  .toc-nav a:hover {
-    color: #002FA7;
-    border-left-color: #002FA7;
-  }
-  .dark .toc-nav a {
-    color: #9ca3af;
-  }
-  .dark .toc-nav a:hover {
-    color: #1A67FF;
-    border-left-color: #1A67FF;
-  }
-  .toc-nav a.toc-h3 {
-    padding-left: 32px;
-    font-size: 12px;
-    color: #9ca3af;
-  }
-  .dark .toc-nav a.toc-h3 {
-    color: #6b7280;
-  }
-  .toc-nav a.toc-active {
-    color: #002FA7;
-    border-left-color: #002FA7;
-    font-weight: 600;
-  }
-  .dark .toc-nav a.toc-active {
-    color: #1A67FF;
-    border-left-color: #1A67FF;
-  }
 </style>
 
 <script is:inline>
@@ -98,8 +57,12 @@
     }
 
     var items = [];
+    // 暗色模式检测
+    var isDark = document.documentElement.classList.contains('dark');
+    var defaultColor = isDark ? '#9ca3af' : '#6b7280';
+    var h3Color = isDark ? '#6b7280' : '#9ca3af';
+    var hoverColor = isDark ? '#1A67FF' : '#002FA7';
     headings.forEach(function(h, i) {
-      // 跳过已经有 id 的
       if (!h.id) {
         h.id = 'heading-' + i;
       }
@@ -110,13 +73,50 @@
       });
     });
 
-    // ── 2. 渲染目录 ──
-    var html = '';
+    // ── 2. 渲染目录（使用 DOM API 而非 innerHTML，避免 astro scoped css 不匹配）──
     items.forEach(function(item) {
-      var cls = item.tag === 'h3' ? 'toc-h3' : '';
-      html += '<a href="#' + item.id + '" class="' + cls + '" data-target="' + item.id + '">' + escapeHtml(item.text) + '</a>';
+      var a = document.createElement('a');
+      a.href = '#' + item.id;
+      a.textContent = item.text;
+      a.setAttribute('data-target', item.id);
+      // 直接内联样式，避免 astro scoped css 不匹配
+      a.style.display = 'block';
+      a.style.padding = '3px 0';
+      a.style.fontFamily = "'JetBrains Mono', 'Inter', monospace";
+      a.style.fontSize = '13px';
+      a.style.lineHeight = '1.5';
+      a.style.color = defaultColor;
+      a.style.textDecoration = 'none';
+      a.style.transition = 'all .15s ease';
+      a.style.borderLeft = '2px solid transparent';
+      a.style.marginLeft = '-18px';
+      a.style.paddingLeft = '16px';
+      if (item.tag === 'h3') {
+        a.style.paddingLeft = '32px';
+        a.style.fontSize = '12px';
+        a.style.color = h3Color;
+      }
+      // hover 效果用 mouseenter/mouseleave
+      a.addEventListener('mouseenter', function() {
+        this.style.color = hoverColor;
+        this.style.borderLeftColor = hoverColor;
+      });
+      a.addEventListener('mouseleave', function() {
+        this.style.color = item.tag === 'h3' ? h3Color : defaultColor;
+        this.style.borderLeftColor = 'transparent';
+      });
+      // 点击平滑滚动
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.getElementById(item.id);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          history.replaceState(null, '', '#' + item.id);
+        }
+      });
+      nav.appendChild(a);
     });
-    nav.innerHTML = html;
+
     if (countEl) countEl.textContent = items.length;
 
     // ── 3. 高亮当前可见章节 ──
@@ -134,28 +134,20 @@
       links.forEach(function(link) {
         var target = link.getAttribute('data-target');
         if (target === activeId) {
-          link.classList.add('toc-active');
+          link.style.color = hoverColor;
+          link.style.borderLeftColor = hoverColor;
+          link.style.fontWeight = '600';
         } else {
-          link.classList.remove('toc-active');
+          var isH3 = items.find(function(i) { return i.id === target; })?.tag === 'h3';
+          link.style.color = isH3 ? h3Color : defaultColor;
+          link.style.borderLeftColor = 'transparent';
+          link.style.fontWeight = 'normal';
         }
       });
     }
 
     window.addEventListener('scroll', updateActive, { passive: true });
     setTimeout(updateActive, 100);
-
-    // ── 4. 点击平滑滚动 ──
-    nav.addEventListener('click', function(e) {
-      var link = e.target.closest('a');
-      if (!link) return;
-      e.preventDefault();
-      var id = link.getAttribute('data-target');
-      var target = document.getElementById(id);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        history.replaceState(null, '', '#' + id);
-      }
-    });
 
     function escapeHtml(str) {
       var d = document.createElement('div');
