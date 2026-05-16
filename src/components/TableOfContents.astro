@@ -99,7 +99,9 @@
         e.preventDefault();
         var target = document.getElementById(item.id);
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          var headerHeight = 64; // sticky header 高度
+          var targetPos = target.getBoundingClientRect().top + window.scrollY - headerHeight;
+          window.scrollTo({ top: targetPos, behavior: 'smooth' });
           history.replaceState(null, '', '#' + item.id);
         }
       });
@@ -111,7 +113,7 @@
     // ── 3. 高亮当前可见章节 ──
     function updateActive() {
       var links = nav.querySelectorAll('a');
-      var scrollTop = window.scrollY + 80;
+      var scrollTop = window.scrollY + 64;
 
       var activeId = null;
       headings.forEach(function(h) {
