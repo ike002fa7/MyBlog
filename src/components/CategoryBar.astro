@@ -26,11 +26,9 @@ const categories = [
         ]}
         data-cat={cat.slug}
       >{cat.label}</button>
-      <!-- 自定义 Tooltip -->
-      <div class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded px-2.5 py-1 text-xs font-normal tracking-wide text-[#D1D5DB] opacity-0 shadow-lg shadow-black/10 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:delay-150" style="background:rgba(24,24,27,0.85);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.08);box-shadow:0 4px 12px rgba(0,0,0,0.12)">
+      <!-- 悬浮 HUD 提示 - 左侧克莱因蓝竖线，无箭头，浮现动效，双主题自适应 -->
+      <div class="pointer-events-none absolute left-1/2 top-full z-50 mt-2.5 -translate-x-1/2 whitespace-nowrap rounded px-3 py-1.5 text-xs font-normal tracking-wide opacity-0 transition-all duration-200 ease-out translate-y-1 group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-150 bg-white text-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:bg-[#18181B] dark:text-[#D1D5DB] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)]" style="border-left:2px solid #002FA7;">
         {cat.tip}
-        <!-- 小三角箭头 -->
-        <div class="absolute bottom-full left-1/2 -ml-1 h-1.5 w-1.5 -translate-y-px rotate-45" style="background:rgba(24,24,27,0.85);border:1px solid rgba(255,255,255,0.08);border-right:none;border-bottom:none;"></div>
       </div>
     </div>
   ))}
