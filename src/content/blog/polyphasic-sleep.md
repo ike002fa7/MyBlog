@@ -136,10 +136,15 @@ Uberman 没有核心睡眠——每一段都是小睡。这意味着身体必须
     <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#6b7280;">4h / 天</span>
     <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#9ca3af;">入门级</span>
   </div>
-  <div style="display:flex;height:2rem;border-radius:6px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:white;font-weight:500;">
-    <div style="flex:3;background:#002FA7;display:flex;align-items:center;justify-content:center;">核心 3h</div>
-    <div style="flex:1;background:#1A67FF;display:flex;align-items:center;justify-content:center;">小睡 ×3</div>
-    <div style="flex:20;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#9ca3af;">清醒 20h</div>
+  <div style="display:flex;height:1.8rem;border-radius:6px;overflow:hidden;">
+    <div style="flex:3;background:#002FA7;"></div>
+    <div style="flex:1;background:#1A67FF;"></div>
+    <div style="flex:20;background:#e5e7eb;"></div>
+  </div>
+  <div style="display:flex;font-family:'JetBrains Mono',monospace;font-size:0.7rem;margin-top:0.4rem;color:#6b7280;">
+    <span style="color:#002FA7;">核心 3h</span>
+    <span style="color:#1A67FF;margin-left:0.5rem;">小睡 ×3</span>
+    <span style="color:#9ca3af;margin-left:auto;">清醒 20h</span>
   </div>
 </div>
 
@@ -150,9 +155,13 @@ Uberman 没有核心睡眠——每一段都是小睡。这意味着身体必须
     <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#6b7280;">2-3h / 天</span>
     <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#f59e0b;">进阶</span>
   </div>
-  <div style="display:flex;height:2rem;border-radius:6px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:white;font-weight:500;">
-    <div style="flex:1;background:#1A67FF;display:flex;align-items:center;justify-content:center;">小睡 ×6</div>
-    <div style="flex:21;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#9ca3af;">清醒 21-22h</div>
+  <div style="display:flex;height:1.8rem;border-radius:6px;overflow:hidden;">
+    <div style="flex:1;background:#1A67FF;"></div>
+    <div style="flex:21;background:#e5e7eb;"></div>
+  </div>
+  <div style="display:flex;font-family:'JetBrains Mono',monospace;font-size:0.7rem;margin-top:0.4rem;color:#6b7280;">
+    <span style="color:#1A67FF;">小睡 ×6</span>
+    <span style="color:#9ca3af;margin-left:auto;">清醒 21-22h</span>
   </div>
 </div>
 
@@ -163,9 +172,13 @@ Uberman 没有核心睡眠——每一段都是小睡。这意味着身体必须
     <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#6b7280;">2h / 天</span>
     <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#ef4444;">地狱级</span>
   </div>
-  <div style="display:flex;height:2rem;border-radius:6px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:white;font-weight:500;">
-    <div style="flex:1;background:#1A67FF;display:flex;align-items:center;justify-content:center;">小睡 ×4</div>
-    <div style="flex:22;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#9ca3af;">清醒 22h</div>
+  <div style="display:flex;height:1.8rem;border-radius:6px;overflow:hidden;">
+    <div style="flex:1;background:#1A67FF;"></div>
+    <div style="flex:22;background:#e5e7eb;"></div>
+  </div>
+  <div style="display:flex;font-family:'JetBrains Mono',monospace;font-size:0.7rem;margin-top:0.4rem;color:#6b7280;">
+    <span style="color:#1A67FF;">小睡 ×4</span>
+    <span style="color:#9ca3af;margin-left:auto;">清醒 22h</span>
   </div>
 </div>
 
