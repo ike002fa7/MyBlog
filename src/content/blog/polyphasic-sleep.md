@@ -125,12 +125,12 @@ Uberman 没有核心睡眠——每一段都是小睡。这意味着身体必须
 
 ## 三大计划对比
 
-<div style="width:100%;max-width:800px;margin:2rem auto;">
+<div style="width:100%;max-width:800px;margin:2rem auto;" class="not-prose">
 
 <div style="display:flex;flex-direction:column;gap:2rem;">
 
 <!-- Everyman -->
-    <div class="pss-card">
+<div class="pss-card">
   <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
     <span style="background:#002FA7;color:white;padding:0.15rem 0.6rem;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:600;">EVERYMAN</span>
     <span style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#6b7280;">4h / 天</span>
