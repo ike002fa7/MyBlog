@@ -101,6 +101,9 @@ const pageUrl = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
   .prose tbody td { padding: 0.75rem 1rem; }
   .prose tbody tr:nth-child(even) { background: #f9fafb; }
   .dark .prose tbody tr:nth-child(even) { background: #111827; }
+  /* 多相睡眠对比卡片暗色模式 */
+  .dark .pss-card { background: #0d1117; border-color: #1f2937; }
+  .pss-card { background: #fafbfc; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.5rem; }
   /* blockquote 克莱因蓝左边框 */
   .prose blockquote { border-left-color: #002FA7 !important; background: #f0f4ff; border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; }
   .dark .prose blockquote { background: #1e2235; border-left-color: #1A67FF !important; }
