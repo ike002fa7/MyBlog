@@ -22,7 +22,7 @@ const catLabel = {
         <h1 class="flex items-baseline gap-1 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
           <span class="text-klein">❯</span>
           所有文章
-          <span class="cursor-terminal"></span>
+          <span class="cursor-terminal" style="display:inline-block!important;width:0.4em;height:0.85em;background-color:#002FA7;vertical-align:middle!important;margin:0;border-radius:1px;line-height:1;flex:none;animation:blink 1s step-end infinite"></span>
         </h1>
         <div class="mt-2 flex items-center gap-3">
           <p class="font-mono text-sm text-gray-400 dark:text-gray-500">{posts.length} 篇文章</p>
@@ -70,24 +70,12 @@ const catLabel = {
 </BaseLayout>
 
 <style is:global>
-  .cursor-terminal {
-    display: inline-block !important;
-    width: 0.4em;
-    height: 0.85em;
-    background-color: #002FA7;
-    vertical-align: middle !important;
-    margin: 0;
-    border-radius: 1px;
-    line-height: 1;
-    flex: none;
-    animation: blink 1s step-end infinite;
-  }
-  .dark .cursor-terminal {
-    background-color: #1A67FF;
-  }
   @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
+  }
+  .dark .cursor-terminal {
+    background-color: #1A67FF !important;
   }
 </style>
 
