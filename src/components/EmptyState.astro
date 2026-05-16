@@ -1,0 +1,55 @@
+---
+// 空状态组件 — 无文章时的占位 UI
+// 用终端风格的文案代替传统 "暂无文章"，
+// min-height 撑开容器，防止父容器塌陷导致导航栏位移。
+interface Props {
+  catName?: string;
+}
+const { catName = '' } = Astro.props;
+const label = catName || '该分类';
+---
+
+<div id="empty-state" class="hidden col-span-full">
+  <div class="flex flex-col items-center justify-center min-h-[40vh] px-6 py-16">
+    <!-- 终端风格的 code block -->
+    <div class="w-full max-w-lg rounded-xl border border-klein/15 bg-[#fafbfc] dark:bg-[#0d1117] dark:border-klein/20 p-6 font-mono text-sm shadow-sm">
+      <!-- 终端标题栏 -->
+      <div class="mb-4 flex items-center gap-2 border-b border-gray-200 dark:border-gray-800 pb-3">
+        <div class="flex gap-1.5">
+          <span class="h-2.5 w-2.5 rounded-full bg-red-400"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-yellow-400"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-green-400"></span>
+        </div>
+        <span class="ml-2 text-[10px] uppercase tracking-[0.15em] text-gray-400 dark:text-gray-600 select-none">terminal — bash — 80×24</span>
+      </div>
+
+      <!-- 提示行 -->
+      <div class="space-y-2 text-gray-500 dark:text-gray-400">
+        <div class="flex">
+          <span class="shrink-0 text-klein/60 select-none">$ </span>
+          <span class="ml-2 text-gray-400 dark:text-gray-500">SELECT * FROM posts WHERE category = '<span class="text-klein-400">${label}</span>';</span>
+        </div>
+        <div class="flex">
+          <span class="text-green-500 select-none">▶ </span>
+          <span class="ml-2 text-green-600 dark:text-green-500">0</span>
+          <span class="ml-1 text-gray-400 dark:text-gray-500">rows returned in 0.004s</span>
+        </div>
+        <div class="mt-4 flex">
+          <span class="shrink-0 text-klein/60 select-none">$ </span>
+          <span class="ml-2 text-gray-400 dark:text-gray-500">
+            <span class="text-gray-300 dark:text-gray-600">// </span>
+            <span class="text-gray-500 dark:text-gray-400">System.out.</span><span class="text-klein-400">println</span>
+            <span class="text-gray-500 dark:text-gray-400">(</span>
+            <span class="text-amber-600 dark:text-amber-500">"暂无数据输入..."</span>
+            <span class="text-gray-500 dark:text-gray-400">);</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部小幅文案 -->
+    <p class="mt-6 text-xs text-gray-400 dark:text-gray-600 font-mono tracking-wide select-none">
+      <span class="text-klein/50">[</span> 没有找到匹配的文章 <span class="text-klein/50">]</span>
+    </p>
+  </div>
+</div>

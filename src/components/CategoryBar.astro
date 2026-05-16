@@ -13,6 +13,7 @@ const categories = [
 ];
 ---
 
+<!-- 分类导航栏：保证布局稳定，CSS 不依赖下方内容高度 -->
 <div id="category-bar" class="mb-8 flex flex-wrap items-center gap-2" data-limit={String(limit)}>
   {categories.map((cat, i) => (
     <button
@@ -34,8 +35,19 @@ const categories = [
     var btns = document.querySelectorAll('.cat-btn');
     var container = bar.parentElement;
 
+    // 分类中文名映射（与 index.astro 同步）
+    var catLabel = {
+      '全部': '全部',
+      'nod': '节点',
+      'ter': '终端',
+      'wrk': '工作台',
+      'ker': '内核',
+      'ovf': '溢出',
+    };
+
     function filterPosts(cat) {
       var cards = document.querySelectorAll('.post-card');
+      var emptyState = document.getElementById('empty-state');
       var shown = 0;
       cards.forEach(function(card) {
         var match = cat === '全部' || card.getAttribute('data-category') === cat;
@@ -46,11 +58,16 @@ const categories = [
           card.style.display = 'none';
         }
       });
-      // 无文章提示
-      var noMsg = document.getElementById('no-posts-msg');
-      if (noMsg) {
-        noMsg.style.display = shown === 0 ? '' : 'none';
+
+      // 空状态控制
+      if (emptyState) {
+        if (shown === 0) {
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+        }
       }
+
       // 当文章数少于2时仍保留2列宽度（不改变布局）
       var grid = document.querySelector('.grid');
       if (grid && shown === 1) {
@@ -66,7 +83,7 @@ const categories = [
         cards.forEach(function(c) { c.style.gridColumn = ''; });
       }
       var countEl = document.getElementById('visible-count');
-      if (countEl) countEl.textContent = cat === '全部' ? '' : ' · ' + cat;
+      if (countEl) countEl.textContent = cat === '全部' ? '' : ' · ' + (catLabel[cat] || cat);
     }
 
     var activeClass = 'bg-klein text-white shadow-sm shadow-klein/20';
