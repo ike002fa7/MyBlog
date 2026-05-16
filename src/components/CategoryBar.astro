@@ -13,19 +13,26 @@ const categories = [
 ];
 ---
 
-<!-- 分类导航栏：保证布局稳定，CSS 不依赖下方内容高度 -->
+<!-- 分类导航栏 -->
 <div id="category-bar" class="mb-8 flex flex-wrap items-center gap-2" data-limit={String(limit)}>
   {categories.map((cat, i) => (
-    <button
-      class:list={[
-        'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all',
-        i === 0
-          ? 'bg-klein text-white shadow-sm shadow-klein/20'
-          : 'border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300'
-      ]}
-      data-cat={cat.slug}
-      title={cat.tip}
-    >{cat.label}</button>
+    <div class="group relative">
+      <button
+        class:list={[
+          'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all',
+          i === 0
+            ? 'bg-klein text-white shadow-sm shadow-klein/20'
+            : 'border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300'
+        ]}
+        data-cat={cat.slug}
+      >{cat.label}</button>
+      <!-- 自定义 Tooltip -->
+      <div class="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-[#1A1A1A] px-3 py-1.5 text-xs text-white opacity-0 shadow-lg transition-all duration-200 ease-out group-hover:opacity-100 group-hover:delay-150 dark:bg-gray-100 dark:text-gray-900">
+        {cat.tip}
+        <!-- 小三角箭头 -->
+        <div class="absolute bottom-full left-1/2 -ml-1 h-2 w-2 -translate-y-px rotate-45 bg-[#1A1A1A] dark:bg-gray-100"></div>
+      </div>
+    </div>
   ))}
 </div>
 
