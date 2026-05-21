@@ -11,7 +11,7 @@ export const GET: APIRoute = async () => {
     { loc: '/about/', priority: '0.5', changefreq: 'monthly' },
   ];
 
-  const baseUrl = 'https://www.x-atcn.top';
+  const baseUrl = 'https://kleinblue.top';
 
   const urlEntries = [
     ...staticPages.map(

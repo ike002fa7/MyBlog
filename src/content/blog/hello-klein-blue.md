@@ -57,7 +57,7 @@ tags: ["博客", "Astro", "克莱因蓝", "前端架构"]
 | 统计 | Supabase | 浏览量、点赞、评论数，Serverless + PostgreSQL |
 | 搜索 | Astro 构建时生成 | `search-index.json.ts` 在构建时从所有文章提取标题、正文、分类、标签 |
 | 部署 | Cloudflare Pages | GitHub Push 自动构建，全球 CDN 分发 |
-| 域名 | Cloudflare DNS | `x-atcn.top`，Zone ID 托管，`www` 子域名 301 重定向 |
+| 域名 | Cloudflare DNS | `kleinblue.top`，Zone ID 托管 |
 
 ### 为什么是 Astro？
 

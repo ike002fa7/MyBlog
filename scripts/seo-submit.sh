@@ -19,7 +19,7 @@
 
 set -e
 
-BASE_URL="https://www.x-atcn.top"
+BASE_URL="https://kleinblue.top"
 SITEMAP_URL="${BASE_URL}/sitemap.xml"
 DIST_DIR="dist"
 

@@ -2,7 +2,7 @@
 
 极简科技风个人博客 — 克莱因蓝 · 无服务器 · GitHub Pages
 
-**https://x-atcn.top**
+**https://kleinblue.top**
 
 ## 技术栈
 
@@ -13,7 +13,7 @@
 | 评论 | [Giscus](https://giscus.app) (GitHub Discussions) |
 | 统计 | [Supabase](https://supabase.com) REST API |
 | 部署 | GitHub Pages + GitHub Actions |
-| 域名 | x-atcn.top (Cloudflare) |
+| 域名 | kleinblue.top (Cloudflare) |
 
 ## 项目结构
 
