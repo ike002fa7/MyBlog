@@ -20,7 +20,7 @@ const navItems = [
           const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
           return (
             <li>
-              <a href={item.href} 
+              <a href={item.href} aria-current={isActive ? 'page' : undefined}
                  class={`px-3 py-2 text-sm font-bold rounded-lg transition-all
                    ${isActive 
                      ? 'bg-klein text-white shadow-sm' 
@@ -33,11 +33,11 @@ const navItems = [
         })}
       </ul>
       <!-- 搜索按钮 -->
-      <button id="search-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800" aria-label="搜索" title="搜索 (Ctrl+K)">
+      <button id="search-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors dark:text-gray-400 dark:hover:bg-gray-800" aria-label="打开搜索" title="搜索 (Ctrl+K)" aria-expanded="false" aria-controls="search-overlay">
         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </button>
       <!-- 移动端汉堡按钮 -->
-      <button id="menu-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800" aria-label="菜单">
+      <button id="menu-toggle" class="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 md:hidden dark:text-gray-400 dark:hover:bg-gray-800" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu">
         <svg id="menu-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
         <svg id="menu-close" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
@@ -50,7 +50,7 @@ const navItems = [
         const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
         return (
           <li>
-            <a href={item.href} 
+              <a href={item.href} aria-current={isActive ? 'page' : undefined}
                class={`block rounded-lg px-3 py-2.5 text-sm font-bold transition-all
                  ${isActive 
                    ? 'bg-klein text-white' 
@@ -66,112 +66,157 @@ const navItems = [
 </header>
 
 <!-- 搜索弹窗 -->
-<div id="search-overlay" class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 pt-[15vh] backdrop-blur-sm">
-  <div class="mx-4 w-full max-w-xl rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900">
+<div id="search-overlay" class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 pt-[15vh] backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="search-title" aria-hidden="true">
+  <div class="mx-4 w-full max-w-xl rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900" tabindex="-1">
+    <h2 id="search-title" class="sr-only">搜索文章</h2>
     <div class="flex items-center border-b border-gray-100 px-4 dark:border-gray-700">
       <svg class="h-5 w-5 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input id="search-input" type="text" placeholder="搜索文章…" class="w-full bg-transparent px-3 py-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500" autofocus />
-      <kbd class="hidden rounded border border-gray-200 px-1.5 py-0.5 font-mono text-[10px] text-gray-400 sm:inline-block dark:border-gray-600">Esc</kbd>
+      <input id="search-input" type="search" placeholder="搜索文章…" class="w-full bg-transparent px-3 py-4 text-sm text-gray-900 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500" autocomplete="off" aria-controls="search-results" aria-autocomplete="list" />
+      <button id="search-close" type="button" class="rounded border border-gray-200 px-2 py-1 font-mono text-[10px] text-gray-400 hover:text-klein dark:border-gray-600" aria-label="关闭搜索">Esc</button>
     </div>
-    <div id="search-results" class="max-h-72 overflow-y-auto p-2">
+    <div id="search-results" class="max-h-72 overflow-y-auto p-2" role="listbox" aria-live="polite">
       <p class="px-3 py-6 text-center text-sm text-gray-400">输入关键词搜索文章标题和摘要</p>
     </div>
   </div>
 </div>
 
 <script is:inline>
-  // 汉堡菜单
-  document.getElementById('menu-toggle').addEventListener('click', () => {
-    const menu = document.getElementById('mobile-menu');
-    const open = document.getElementById('menu-open');
-    const close = document.getElementById('menu-close');
-    menu.classList.toggle('hidden');
-    open.classList.toggle('hidden');
-    close.classList.toggle('hidden');
-  });
-
-  // 搜索功能
   (function() {
+    var menuToggle = document.getElementById('menu-toggle');
+    var mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', function() {
+      var expanded = menuToggle.getAttribute('aria-expanded') !== 'true';
+      menuToggle.setAttribute('aria-expanded', String(expanded));
+      menuToggle.setAttribute('aria-label', expanded ? '关闭菜单' : '打开菜单');
+      mobileMenu.classList.toggle('hidden', !expanded);
+      document.getElementById('menu-open').classList.toggle('hidden', expanded);
+      document.getElementById('menu-close').classList.toggle('hidden', !expanded);
+    });
+
     var overlay = document.getElementById('search-overlay');
     var input = document.getElementById('search-input');
     var results = document.getElementById('search-results');
+    var toggle = document.getElementById('search-toggle');
+    var closeButton = document.getElementById('search-close');
     var index = [];
+    var activeIndex = -1;
+    var previousFocus = null;
+    var catNames = { nod: '节点', ter: '终端', wrk: '工作台', ker: '内核', ovf: '溢出' };
+    var catColors = { nod:'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300', ter:'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300', wrk:'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', ker:'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', ovf:'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' };
 
-    // 加载搜索索引
-    fetch('/search-index.json')
-      .then(function(r) { return r.json(); })
-      .then(function(data) { index = data; });
+    function setStatus(message) {
+      results.replaceChildren();
+      var status = document.createElement('p');
+      status.className = 'px-3 py-6 text-center text-sm text-gray-400';
+      status.textContent = message;
+      results.appendChild(status);
+      activeIndex = -1;
+    }
+
+    var indexReady = fetch('/search-index.json')
+      .then(function(r) {
+        if (!r.ok) throw new Error('search index unavailable');
+        return r.json();
+      })
+      .then(function(data) { index = data; return data; })
+      .catch(function() { setStatus('搜索索引暂时不可用，请稍后重试'); return []; });
 
     function openSearch() {
+      if (overlay.getAttribute('aria-hidden') === 'false') return;
+      previousFocus = document.activeElement;
       overlay.classList.remove('hidden');
       overlay.classList.add('flex');
-      setTimeout(function() { input.focus(); }, 100);
+      overlay.setAttribute('aria-hidden', 'false');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function() { input.focus(); }, 50);
     }
+
     function closeSearch() {
+      if (overlay.getAttribute('aria-hidden') === 'true') return;
       overlay.classList.add('hidden');
       overlay.classList.remove('flex');
+      overlay.setAttribute('aria-hidden', 'true');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
       input.value = '';
-      results.innerHTML = '<p class="px-3 py-6 text-center text-sm text-gray-400">输入关键词搜索文章标题和摘要</p>';
+      setStatus('输入关键词搜索文章标题和摘要');
+      if (previousFocus && typeof previousFocus.focus === 'function') previousFocus.focus();
     }
 
-    document.getElementById('search-toggle').addEventListener('click', openSearch);
-    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeSearch(); });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeSearch();
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
-    });
-
-    var catColors = { 'nod':'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300', 'ter':'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300', 'wrk':'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', 'ker':'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', 'ovf':'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' };
-
-    input.addEventListener('input', function() {
-      var q = this.value.trim().toLowerCase();
-      if (!q) { results.innerHTML = '<p class="px-3 py-6 text-center text-sm text-gray-400">输入关键词搜索文章标题和摘要</p>'; return; }
+    function runSearch(value) {
+      var q = value.trim().toLowerCase();
+      if (!q) { setStatus('输入关键词搜索文章标题和摘要'); return; }
+      if (!index.length) { setStatus('正在加载搜索索引…'); return; }
       var found = index.filter(function(p) {
         return p.title.toLowerCase().includes(q)
           || p.excerpt.toLowerCase().includes(q)
           || p.body.toLowerCase().includes(q)
-          || (p.tags||[]).some(function(t) { return t.toLowerCase().includes(q); })
-          || (p.category||'').toLowerCase().includes(q)
-          || (p.categoryName||'').toLowerCase().includes(q);
+          || (p.tags || []).some(function(t) { return t.toLowerCase().includes(q); })
+          || (catNames[p.category] || '').includes(q);
       });
-      if (!found.length) {
-        results.innerHTML = '<p class="px-3 py-6 text-center text-sm text-gray-400">未找到匹配文章</p>';
-        return;
-      }
+      if (!found.length) { setStatus('未找到匹配文章'); return; }
       results.replaceChildren();
-      found.forEach(function(p) {
-        var catClass = catColors[p.category] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400';
-        var catName = p.categoryName || p.category || '溢出';
+      activeIndex = -1;
+      found.forEach(function(p, resultIndex) {
         var link = document.createElement('a');
         link.href = '/blog/' + String(p.slug).split('/').map(encodeURIComponent).join('/');
-        link.className = 'flex flex-col gap-1 rounded-xl px-3 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
-
+        link.className = 'flex flex-col gap-1 rounded-xl px-3 py-3 transition-colors hover:bg-gray-50 focus:bg-gray-50 dark:hover:bg-gray-800 dark:focus:bg-gray-800';
+        link.setAttribute('role', 'option');
+        link.id = 'search-result-' + resultIndex;
+        link.dataset.resultIndex = String(resultIndex);
         var heading = document.createElement('div');
         heading.className = 'flex items-center gap-2';
-
         var badge = document.createElement('span');
-        badge.className = 'rounded-full px-2 py-0.5 text-[10px] font-medium ' + catClass;
-        badge.textContent = catName;
-
+        badge.className = 'rounded-full px-2 py-0.5 text-[10px] font-medium ' + (catColors[p.category] || catColors.ovf);
+        badge.textContent = catNames[p.category] || '溢出';
         var title = document.createElement('span');
         title.className = 'text-sm font-medium text-gray-900 dark:text-white';
         title.textContent = p.title;
-
         var excerpt = document.createElement('p');
         excerpt.className = 'line-clamp-1 text-xs text-gray-400';
         excerpt.textContent = p.excerpt || '';
-
         heading.append(badge, title);
         link.append(heading, excerpt);
         results.appendChild(link);
       });
+    }
+
+    toggle.addEventListener('click', openSearch);
+    closeButton.addEventListener('click', closeSearch);
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeSearch(); });
+    input.addEventListener('input', function() { runSearch(input.value); });
+    function handleResultNavigation(e) {
+      var links = Array.from(results.querySelectorAll('a'));
+      if (!links.length) return;
+      if (e.key === 'ArrowDown') activeIndex = Math.min(activeIndex + 1, links.length - 1);
+      else if (e.key === 'ArrowUp') activeIndex = Math.max(activeIndex - 1, 0);
+      else if (e.key === 'Enter' && activeIndex >= 0) { e.preventDefault(); links[activeIndex].click(); return; }
+      else return;
+      e.preventDefault();
+      links.forEach(function(link, index) { link.setAttribute('aria-selected', String(index === activeIndex)); });
+      input.setAttribute('aria-activedescendant', links[activeIndex].id);
+      links[activeIndex].focus();
+    }
+    input.addEventListener('keydown', handleResultNavigation);
+    results.addEventListener('keydown', handleResultNavigation);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeSearch();
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+      if (e.key === 'Tab' && overlay.getAttribute('aria-hidden') === 'false') {
+        var focusable = [input, closeButton].concat(Array.from(results.querySelectorAll('a')));
+        var first = focusable[0], last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
 
     var initialSearch = new URLSearchParams(window.location.search).get('search');
     if (initialSearch) {
       openSearch();
       input.value = initialSearch;
-      input.dispatchEvent(new Event('input'));
+      setStatus('正在加载搜索索引…');
+      indexReady.then(function() { runSearch(initialSearch); });
     }
   })();
 </script>
