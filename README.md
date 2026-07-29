@@ -12,7 +12,6 @@
 | 样式 | [Tailwind CSS 4](https://tailwindcss.com) + `@tailwindcss/typography` |
 | 评论 | [Giscus](https://giscus.app) (GitHub Discussions) |
 | 统计 | [Supabase](https://supabase.com) REST API |
-| 订阅 | [RSS](https://kleinblue.top/rss.xml) |
 | 部署 | GitHub Pages + GitHub Actions |
 | 域名 | kleinblue.top (Cloudflare) |
 
@@ -78,7 +77,7 @@ references:                   # 可选资料来源
 
 推送 `main` 分支自动部署。
 
-站点会自动生成阅读时间、上一篇/下一篇、同分类延伸阅读、站点地图、搜索索引与 RSS。当前内容体系为节点、终端、工作台、内核、溢出五个分类，每类保留 4 篇文章。
+站点会自动生成阅读时间、上一篇/下一篇、同分类延伸阅读、站点地图与搜索索引。当前内容体系为节点、终端、工作台、内核、溢出五个分类，每类保留 4 篇文章。
 
 ## 数据库
 
