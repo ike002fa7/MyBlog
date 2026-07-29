@@ -42,7 +42,7 @@
           animateCount(c.querySelector('.views-count'), data[0].views || 0);
           animateCount(c.querySelector('.likes-count'), data[0].likes || 0);
         } else {
-          // 无数据时显示 0
+          // 请求成功但文章尚无统计记录
           ['.views-count', '.likes-count'].forEach(function(sel) {
             var el = c.querySelector(sel);
             if (el) el.textContent = '0';
@@ -50,10 +50,13 @@
         }
       })
       .catch(function () {
-        // 网络错误时显示 0
+        // 网络错误不伪装成真实的 0
         ['.views-count', '.likes-count'].forEach(function(sel) {
           var el = c.querySelector(sel);
-          if (el) el.textContent = '0';
+          if (el) {
+            el.textContent = '—';
+            el.title = '统计数据暂时不可用';
+          }
         });
       });
   });
