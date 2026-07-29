@@ -9,7 +9,7 @@ const catLabel: Record<string, string> = {
 };
 
 export async function GET() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
   const index = posts.map((p) => ({
     title: p.data.title,
     slug: p.id,
