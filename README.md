@@ -12,6 +12,7 @@
 | 样式 | [Tailwind CSS 4](https://tailwindcss.com) + `@tailwindcss/typography` |
 | 评论 | [Giscus](https://giscus.app) (GitHub Discussions) |
 | 统计 | [Supabase](https://supabase.com) REST API |
+| 订阅 | [RSS](https://kleinblue.top/rss.xml) |
 | 部署 | GitHub Pages + GitHub Actions |
 | 域名 | kleinblue.top (Cloudflare) |
 
@@ -59,14 +60,25 @@ npm run build    # 输出到 dist/
 ---
 title: 文章标题
 date: 2026-05-10
+updatedDate: 2026-05-12       # 可选
 excerpt: 摘要
+category: nod                 # nod / ter / wrk / ker / ovf
 tags: [标签1, 标签2]
+draft: false                  # 草稿不会构建
+featured: false               # 首页精选标记
+cover: /images/example.png    # 可选社交分享图
+series: 系列名称              # 可选
+references:                   # 可选资料来源
+  - title: 资料标题
+    url: https://example.com
 ---
 
 正文内容...
 ```
 
 推送 `main` 分支自动部署。
+
+站点会自动生成阅读时间、上一篇/下一篇、同分类延伸阅读、站点地图、搜索索引与 RSS。当前内容体系为节点、终端、工作台、内核、溢出五个分类，每类保留 4 篇文章。
 
 ## 数据库
 
