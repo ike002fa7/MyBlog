@@ -92,11 +92,11 @@ const jsonLd = {
 
     <!-- 底部交互栏 -->
     <div class="mt-16 flex items-center justify-between border-t border-gray-100 pt-8 dark:border-gray-800">
-      <button class="like-btn group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl border border-gray-200 px-5 py-2.5 font-mono text-sm text-gray-500 transition-all hover:border-klein/40 hover:text-klein dark:border-gray-700 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-slug={post.id}>
+      <button class="like-btn group relative inline-flex items-center gap-2.5 overflow-hidden rounded-xl border border-gray-200 px-5 py-2.5 font-mono text-sm text-gray-500 transition-all hover:border-klein/40 hover:text-klein dark:border-gray-700 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300" data-slug={post.id} type="button" aria-pressed="false" aria-label="为这篇文章点赞">
         <!-- 心形图标动画 -->
         <span class="like-icon relative flex h-5 w-5 items-center justify-center">
-          <svg class="heart-outline absolute transition-all group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
-          <svg class="heart-filled absolute scale-0 opacity-0 transition-all" fill="#002FA7" stroke="#002FA7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+          <svg class="heart-outline h-5 w-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg>
+          <svg class="heart-filled hidden h-5 w-5 text-klein" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.645 20.91a.75.75 0 0 0 .71 0l.102-.058C18.684 17.294 22 13.21 22 8.75A5.75 5.75 0 0 0 12 4.87 5.75 5.75 0 0 0 2 8.75c0 4.46 3.316 8.544 9.543 12.102l.102.058Z"/></svg>
         </span>
         <span class="like-label">点赞</span>
         <span class="like-count font-semibold">--</span>
@@ -164,15 +164,29 @@ const jsonLd = {
       if (!btn) return;
       if (liked) {
         btn.classList.add('liked');
+        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('aria-label', '已为这篇文章点赞');
         var outline = btn.querySelector('.heart-outline');
         var filled = btn.querySelector('.heart-filled');
-        if (outline) outline.style.opacity = '0';
-        if (filled) { filled.style.transform = 'scale(1)'; filled.style.opacity = '1'; }
+        if (outline) outline.classList.add('hidden');
+        if (filled) filled.classList.remove('hidden');
         var label = btn.querySelector('.like-label');
         if (label) label.textContent = '已赞';
         if (animate) {
-          btn.style.transform = 'scale(1.15)';
-          setTimeout(function() { btn.style.transform = ''; }, 200);
+          if (filled && typeof filled.animate === 'function') {
+            filled.animate([
+              { transform: 'scale(.35)', opacity: .2 },
+              { transform: 'scale(1.35)', opacity: 1, offset: .65 },
+              { transform: 'scale(1)', opacity: 1 }
+            ], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+          }
+          if (typeof btn.animate === 'function') {
+            btn.animate([
+              { transform: 'scale(1)' },
+              { transform: 'scale(1.08)' },
+              { transform: 'scale(1)' }
+            ], { duration: 260, easing: 'ease-out' });
+          }
         }
       }
     }
@@ -193,11 +207,22 @@ const jsonLd = {
     // ── 4. Giscus 评论 + 监听评论数 ──
     window.addEventListener('message', function(event) {
       if (event.origin !== 'https://giscus.app') return;
-      if (event.data?.giscus?.discussion) {
+      var frame = document.querySelector('.giscus-frame');
+      if (frame && event.source !== frame.contentWindow) return;
+      if (!event.data || typeof event.data !== 'object' || !event.data.giscus) return;
+      if ('discussion' in event.data.giscus) {
         var d = event.data.giscus.discussion;
+        if (!d) {
+          var emptyCount = document.querySelector('.comments-count');
+          if (emptyCount) emptyCount.textContent = '0';
+          return;
+        }
         var count = (d.totalCommentCount || 0) + (d.totalReplyCount || 0);
         var cc = document.querySelector('.comments-count');
-        if (cc && count != null) cc.textContent = count;
+        if (cc) cc.textContent = String(count);
+      } else if ('error' in event.data.giscus) {
+        var errorCount = document.querySelector('.comments-count');
+        if (errorCount) errorCount.textContent = '0';
       }
     });
 
@@ -210,7 +235,7 @@ const jsonLd = {
     gs.setAttribute('data-category-id', 'DIC_kwDOSZJ6ks4C8sa_');
     gs.setAttribute('data-mapping', 'pathname');
     gs.setAttribute('data-reactions-enabled', '1');
-    gs.setAttribute('data-emit-metadata', '0');
+    gs.setAttribute('data-emit-metadata', '1');
     gs.setAttribute('data-input-position', 'bottom');
     gs.setAttribute('data-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     gs.setAttribute('data-lang', 'zh-CN');
@@ -221,8 +246,6 @@ const jsonLd = {
 </script>
 
 <style>
-  .liked .heart-outline { opacity: 0; }
-  .liked .heart-filled { transform: scale(1); opacity: 1; }
   /* 代码块复制按钮 */
   .prose pre { position: relative; }
   .prose pre:hover .copy-btn { opacity: 1; }
