@@ -1,10 +1,12 @@
 ---
 title: "你好，克莱因蓝"
 date: 2026-05-10
+updatedDate: 2026-07-29
 category: "ovf"
 categoryName: "溢出"
 excerpt: "这是 X-ATCN 的首篇博文。以克莱因蓝为灵魂色调，讲述这个站点的设计理念、技术栈与架构选择。从零搭建，独立部署，碎片沉淀为代码，思想蒸发成像素。"
 tags: ["博客", "Astro", "克莱因蓝", "前端架构"]
+featured: true
 ---
 
 ## 起因
