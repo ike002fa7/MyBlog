@@ -23,7 +23,7 @@ export const GET: APIRoute = async () => {
     ),
     ...posts.map(
       (post) => `  <url>
-    <loc>${baseUrl}/blog/${post.slug}/</loc>
+    <loc>${baseUrl}/blog/${post.id}/</loc>
     <lastmod>${post.data.date.toISOString().split('T')[0]}</lastmod>
     <priority>0.8</priority>
   </url>`

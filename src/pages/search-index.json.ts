@@ -12,7 +12,7 @@ export async function GET() {
   const posts = await getCollection('blog');
   const index = posts.map((p) => ({
     title: p.data.title,
-    slug: p.slug,
+    slug: p.id,
     excerpt: p.data.excerpt || '',
     body: p.body || '',
     category: p.data.category || 'ovf',

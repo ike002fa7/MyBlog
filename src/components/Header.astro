@@ -121,7 +121,6 @@ const navItems = [
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
     });
 
-    var categories = ['节点','终端','工作台','内核','溢出'];
     var catColors = { 'nod':'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300', 'ter':'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300', 'wrk':'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', 'ker':'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300', 'ovf':'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' };
 
     input.addEventListener('input', function() {
@@ -139,13 +138,40 @@ const navItems = [
         results.innerHTML = '<p class="px-3 py-6 text-center text-sm text-gray-400">未找到匹配文章</p>';
         return;
       }
-      results.innerHTML = found.map(function(p) {
+      results.replaceChildren();
+      found.forEach(function(p) {
         var catClass = catColors[p.category] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400';
         var catName = p.categoryName || p.category || '溢出';
-        return '<a href="/blog/' + p.slug + '" class="flex flex-col gap-1 rounded-xl px-3 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">' +
-          '<div class="flex items-center gap-2"><span class="rounded-full px-2 py-0.5 text-[10px] font-medium ' + catClass + '">' + catName + '</span><span class="text-sm font-medium text-gray-900 dark:text-white">' + p.title + '</span></div>' +
-          '<p class="line-clamp-1 text-xs text-gray-400">' + (p.excerpt||'') + '</p></a>';
-      }).join('');
+        var link = document.createElement('a');
+        link.href = '/blog/' + String(p.slug).split('/').map(encodeURIComponent).join('/');
+        link.className = 'flex flex-col gap-1 rounded-xl px-3 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors';
+
+        var heading = document.createElement('div');
+        heading.className = 'flex items-center gap-2';
+
+        var badge = document.createElement('span');
+        badge.className = 'rounded-full px-2 py-0.5 text-[10px] font-medium ' + catClass;
+        badge.textContent = catName;
+
+        var title = document.createElement('span');
+        title.className = 'text-sm font-medium text-gray-900 dark:text-white';
+        title.textContent = p.title;
+
+        var excerpt = document.createElement('p');
+        excerpt.className = 'line-clamp-1 text-xs text-gray-400';
+        excerpt.textContent = p.excerpt || '';
+
+        heading.append(badge, title);
+        link.append(heading, excerpt);
+        results.appendChild(link);
+      });
     });
+
+    var initialSearch = new URLSearchParams(window.location.search).get('search');
+    if (initialSearch) {
+      openSearch();
+      input.value = initialSearch;
+      input.dispatchEvent(new Event('input'));
+    }
   })();
 </script>

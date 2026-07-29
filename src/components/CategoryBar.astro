@@ -37,12 +37,12 @@ const categories = [
 <script>
   (function() {
     var bar = document.getElementById('category-bar');
-    var limit = parseInt(bar.getAttribute('data-limit')) || 4;
-    var btns = document.querySelectorAll('.cat-btn');
-    var container = bar.parentElement;
+    if (!bar) return;
+    var limit = parseInt(bar.dataset.limit || '4') || 4;
+    var btns = document.querySelectorAll<HTMLButtonElement>('.cat-btn');
 
     // 分类中文名映射（与 index.astro 同步）
-    var catLabel = {
+    var catLabel: Record<string, string> = {
       '全部': '全部',
       'nod': '节点',
       'ter': '终端',
@@ -51,8 +51,8 @@ const categories = [
       'ovf': '溢出',
     };
 
-    function filterPosts(cat) {
-      var cards = document.querySelectorAll('.post-card');
+    function filterPosts(cat: string) {
+      var cards = document.querySelectorAll<HTMLElement>('.post-card');
       var emptyState = document.getElementById('empty-state');
       var shown = 0;
       cards.forEach(function(card) {
@@ -97,7 +97,7 @@ const categories = [
       btn.addEventListener('click', function() {
         btns.forEach(function(b) { b.className = inactiveClass; });
         btn.className = 'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all ' + activeClass;
-        filterPosts(btn.getAttribute('data-cat'));
+        filterPosts(btn.dataset.cat || '全部');
       });
     });
 

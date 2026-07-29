@@ -56,7 +56,7 @@ tags: ["博客", "Astro", "克莱因蓝", "前端架构"]
 | 评论 | Giscus | 基于 GitHub Discussions，无需自建数据库 |
 | 统计 | Supabase | 浏览量、点赞、评论数，Serverless + PostgreSQL |
 | 搜索 | Astro 构建时生成 | `search-index.json.ts` 在构建时从所有文章提取标题、正文、分类、标签 |
-| 部署 | Cloudflare Pages | GitHub Push 自动构建，全球 CDN 分发 |
+| 部署 | GitHub Pages | GitHub Push 自动构建与发布 |
 | 域名 | Cloudflare DNS | `kleinblue.top`，Zone ID 托管 |
 
 ### 为什么是 Astro？
@@ -85,7 +85,7 @@ const blog = defineCollection({
 // src/pages/search-index.json.ts
 const posts = await getCollection('blog');
 const searchIndex = posts.map(p => ({
-  slug: p.slug,
+  slug: p.id,
   title: p.data.title,
   excerpt: p.data.excerpt || '',
   body: p.body,                   // 正文全文索引
@@ -124,7 +124,7 @@ Giscus 的配置逻辑在文章详情页的 `<script>` 中动态创建：
 ```javascript
 var gs = document.createElement('script');
 gs.src = 'https://giscus.app/client.js';
-gs.setAttribute('data-repo', 'jynight/MyBlog');
+gs.setAttribute('data-repo', 'ike002fa7/MyBlog');
 gs.setAttribute('data-repo-id', 'R_kgDOSZJ6kg');
 gs.setAttribute('data-mapping', 'pathname');
 // ...
@@ -168,14 +168,14 @@ MyBlog/
 
 项目的完整代码托管在 GitHub：
 
-👉 **[github.com/jynight/MyBlog](https://github.com/jynight/MyBlog)**
+👉 **[github.com/ike002fa7/MyBlog](https://github.com/ike002fa7/MyBlog)**
 
 欢迎 Fork、Issue 或 PR。如果你觉得这个设计风格有趣，可以随意参考项目的组件实现——特别是 `EmptyState.astro` 和 `CategoryBar.astro` 中的交互逻辑。
 
 博客使用 MIT 协议开源。想自己搭建一个类似的站点，只需要：
 
 ```bash
-git clone https://github.com/jynight/MyBlog.git
+git clone https://github.com/ike002fa7/MyBlog.git
 cd MyBlog
 npm install
 npm run dev

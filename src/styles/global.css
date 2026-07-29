@@ -1,0 +1,19 @@
+@import "tailwindcss/index.css";
+@plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-klein: #002fa7;
+  --color-klein-50: #e6edff;
+  --color-klein-100: #b3ccff;
+  --color-klein-200: #80aaff;
+  --color-klein-300: #4d89ff;
+  --color-klein-400: #1a67ff;
+  --color-klein-500: #002fa7;
+  --color-klein-600: #00238c;
+  --color-klein-700: #001d73;
+  --color-klein-800: #00165a;
+  --color-klein-900: #000f41;
+  --font-sans: "Microsoft YaHei", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+}
