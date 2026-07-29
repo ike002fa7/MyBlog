@@ -2,25 +2,29 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
-
-// 分类中文名映射
-const catLabel = {
-  'nod': '节点',
-  'ter': '终端',
-  'wrk': '工作台',
-  'ker': '内核',
-  'ovf': '溢出',
-};
+import { categoryMap, estimateReadingTime } from '../../config/blog';
 
 export async function getStaticPaths() {
-  return (await getCollection('blog')).map((p) => ({ params: { slug: p.id }, props: { post: p } }));
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  return posts.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      previousPost: posts[index - 1],
+      nextPost: posts[index + 1],
+      relatedPosts: posts.filter((item) => item.id !== post.id && item.data.category === post.data.category).slice(0, 2),
+    },
+  }));
 }
-const { post } = Astro.props;
+const { post, previousPost, nextPost, relatedPosts } = Astro.props;
 const { Content } = await render(post);
+const readingTime = estimateReadingTime(post.body || '');
 
 // 构建 canonical URL 和 ISO 日期
 const canonicalURL = new URL(`/blog/${post.id}`, Astro.site).href;
 const publishedTime = post.data.date.toISOString();
+const modifiedTime = (post.data.updatedDate || post.data.date).toISOString();
 
 // JSON-LD BlogPosting 结构化数据
 const jsonLd = {
@@ -29,7 +33,7 @@ const jsonLd = {
   headline: post.data.title,
   description: post.data.excerpt,
   datePublished: publishedTime,
-  dateModified: publishedTime,
+  dateModified: modifiedTime,
   author: {
     '@type': 'Person',
     name: 'Ike Bullen',
@@ -54,7 +58,9 @@ const jsonLd = {
   currentPath="/blog"
   type="article"
   publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
   canonicalURL={canonicalURL}
+  image={post.data.cover}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
@@ -65,7 +71,7 @@ const jsonLd = {
     <header class="mb-10">
       {post.data.tags && (
         <div class="mb-5 flex flex-wrap gap-2 items-center">
-          <span class="rounded-full bg-klein/10 px-3 py-1 font-mono text-xs font-medium text-klein border border-klein/20 dark:bg-klein/20 dark:border-klein/40 dark:text-klein-300">{catLabel[post.data.category] || '溢出'}</span>
+          <span class="rounded-full bg-klein/10 px-3 py-1 font-mono text-xs font-medium text-klein border border-klein/20 dark:bg-klein/20 dark:border-klein/40 dark:text-klein-300">{categoryMap[post.data.category].label}</span>
           {post.data.tags.map((t) => <span class="rounded-full bg-klein/8 px-3 py-1 font-mono text-xs font-medium text-klein dark:bg-klein/20 dark:text-klein-300">#{t}</span>)}
         </div>
       )}
@@ -76,6 +82,13 @@ const jsonLd = {
           {post.data.date.toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric'})}
         </time>
         <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+        <span class="font-mono text-xs text-gray-400 dark:text-gray-500">{readingTime} 分钟阅读</span>
+        {post.data.updatedDate && (
+          <>
+            <span class="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+            <time class="font-mono text-xs text-gray-400 dark:text-gray-500" datetime={modifiedTime}>更新于 {post.data.updatedDate.toLocaleDateString('zh-CN')}</time>
+          </>
+        )}
         <span class="stats-counter inline-flex items-center gap-3 font-mono text-xs text-gray-400 dark:text-gray-500" data-slug={post.id}>
           <span class="inline-flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg><span class="views-count">--</span></span>
           <span class="inline-flex items-center gap-1"><svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg><span class="likes-count">--</span></span>
@@ -85,10 +98,46 @@ const jsonLd = {
     </header>
 
     <!-- 文章正文 -->
-    <div class="prose prose-lg prose-gray max-w-none dark:prose-invert">
+    <div class="prose prose-lg prose-gray mx-auto max-w-3xl dark:prose-invert">
       <TableOfContents />
       <Content />
+      {post.data.references.length > 0 && (
+        <section aria-labelledby="references-title">
+          <h2 id="references-title">参考资料</h2>
+          <ul>
+            {post.data.references.map((reference) => (
+              <li><a href={reference.url} target="_blank" rel="noopener noreferrer">{reference.title}</a></li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
+
+    <nav class="mx-auto mt-14 grid max-w-3xl gap-4 border-t border-gray-100 pt-8 sm:grid-cols-2 dark:border-gray-800" aria-label="文章翻页">
+      {previousPost ? (
+        <a href={`/blog/${previousPost.id}`} class="group rounded-xl border border-gray-200 p-4 transition hover:border-klein/40 dark:border-gray-800">
+          <span class="font-mono text-xs text-gray-400">← 上一篇</span>
+          <strong class="mt-2 block text-sm group-hover:text-klein">{previousPost.data.title}</strong>
+        </a>
+      ) : <span />}
+      {nextPost && (
+        <a href={`/blog/${nextPost.id}`} class="group rounded-xl border border-gray-200 p-4 text-right transition hover:border-klein/40 dark:border-gray-800">
+          <span class="font-mono text-xs text-gray-400">下一篇 →</span>
+          <strong class="mt-2 block text-sm group-hover:text-klein">{nextPost.data.title}</strong>
+        </a>
+      )}
+    </nav>
+
+    {relatedPosts.length > 0 && (
+      <section class="mx-auto mt-10 max-w-3xl" aria-labelledby="related-title">
+        <h2 id="related-title" class="mb-4 font-mono text-xs uppercase tracking-[.2em] text-gray-400">同分类延伸阅读</h2>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {relatedPosts.map((item) => (
+            <a href={`/blog/${item.id}`} class="rounded-xl bg-gray-50 p-4 text-sm font-semibold transition hover:text-klein dark:bg-gray-900">{item.data.title}</a>
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- 底部交互栏 -->
     <div class="mt-16 flex items-center justify-between border-t border-gray-100 pt-8 dark:border-gray-800">
@@ -172,7 +221,7 @@ const jsonLd = {
         if (filled) filled.classList.remove('hidden');
         var label = btn.querySelector('.like-label');
         if (label) label.textContent = '已赞';
-        if (animate) {
+        if (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
           if (filled && typeof filled.animate === 'function') {
             filled.animate([
               { transform: 'scale(.35)', opacity: .2 },
@@ -222,7 +271,10 @@ const jsonLd = {
         if (cc) cc.textContent = String(count);
       } else if ('error' in event.data.giscus) {
         var errorCount = document.querySelector('.comments-count');
-        if (errorCount) errorCount.textContent = '0';
+        if (errorCount) {
+          errorCount.textContent = '—';
+          errorCount.title = '评论统计暂时不可用';
+        }
       }
     });
 
