@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CategoryBar from '../components/CategoryBar.astro';
 import EmptyState from '../components/EmptyState.astro';
 
-const posts = (await getCollection('blog')).sort((a,b) => b.data.date.getTime() - a.data.date.getTime());
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a,b) => b.data.date.getTime() - a.data.date.getTime());
 
 // 分类中文名映射
 const catLabel = {
@@ -142,6 +142,7 @@ const catLabel = {
   (function() {
     var canvas = document.getElementById('particle-canvas');
     if (!canvas) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var ctx = canvas.getContext('2d');
     var hero = document.getElementById('hero-section');
     var particles = [];
@@ -239,6 +240,11 @@ const catLabel = {
     var cursor = document.getElementById('typing-cursor');
     if (!target || !cursor) return;
     var text = '剥离冗余，专注本质。这里是代码的试验田，也是3C数码与硬核教程的解剖室。以极简的字节，承载独立思考；用技术的语言，探索无界的可能。';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      target.textContent = text;
+      cursor.style.display = 'none';
+      return;
+    }
     var i = 0;
     var speed = 60; // ms per char
     function type() {
