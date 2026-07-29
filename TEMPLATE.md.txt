@@ -1,11 +1,17 @@
 ---
 title: "文章标题"
 date: 2026-05-16
+updatedDate: 2026-05-16
 category: "ovf"
-categoryName: "分类中文名"
 excerpt: "文章摘要，会显示在文章卡片和搜索结果的描述中"
 tags: ["标签1", "标签2"]
-# cover: "https://example.com/cover.jpg"  # 可选，文章封面图
+draft: false
+featured: false
+# cover: "/images/example.png"
+# series: "系列名称"
+# references:
+#   - title: "资料标题"
+#     url: "https://example.com"
 ---
 
 ## 这里写二级标题
