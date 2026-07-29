@@ -142,11 +142,6 @@
     window.addEventListener('scroll', updateActive, { passive: true });
     setTimeout(updateActive, 100);
 
-    function escapeHtml(str) {
-      var d = document.createElement('div');
-      d.textContent = str;
-      return d.innerHTML;
-    }
   }
 
   // 等页面完全加载后再初始化 TOC（确保 <Content /> 已渲染）
