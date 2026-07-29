@@ -1,11 +1,19 @@
 ---
 title: "多相睡眠 · 达芬奇睡眠法"
 date: 2026-05-16
+updatedDate: 2026-07-29
 category: "ovf"
 categoryName: "溢出"
 excerpt: "把睡眠切成碎片。Uberman、Everyman、Dymaxion —— 三种主流多相睡眠计划的完整拆解与个人定制。"
 tags: ["睡眠", "多相睡眠", "达芬奇睡眠法", "效率"]
+references:
+  - title: "CDC — How Much Sleep Do I Need?"
+    url: "https://www.cdc.gov/sleep/about/index.html"
+  - title: "American Academy of Sleep Medicine — Recommended Amount of Sleep"
+    url: "https://aasm.org/resources/pdf/sleepdurationrecommendations.pdf"
 ---
+
+> **健康提示：** 本文用于整理不同睡眠模式的概念，不构成医疗建议。极端缩短睡眠可能影响警觉性、情绪与健康；如有持续失眠、白天嗜睡或计划显著改变睡眠，应先咨询合格的医疗专业人员。驾驶、操作设备或承担高风险工作期间，不应尝试会造成睡眠不足的方案。
 
 ## 引言
 
