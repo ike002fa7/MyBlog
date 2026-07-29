@@ -17,7 +17,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
       
       <!-- 终端内容 -->
-      <div class="px-6 py-6 font-mono text-sm leading-relaxed tracking-wide italic text-white/95" style="background: #002FA7;">
+      <div class="px-6 py-6 font-mono text-sm leading-relaxed tracking-wide text-white/95" style="background: #002FA7;">
         
         <!-- 命令1: whoami -->
         <div class="mb-5">
@@ -39,9 +39,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
         <div class="mb-6 ml-4 border-l-2 border-white/20 pl-4">
           <p>Non-standard logic, deep blue subsidence.</p>
+          <p class="mt-2 text-white/70">产品、技术与个人系统的长期观察者。这个博客用于沉淀可复用的方法、真实的问题和仍在生长的想法。</p>
         </div>
 
-        <!-- 命令3: cat contact.json -->
+        <!-- 命令3: cat focus.json -->
+        <div class="mb-5">
+          <span class="select-none text-[#7cb7ff]">$ </span>
+          <span class="text-white/80">cat ~/focus.json</span>
+        </div>
+        <div class="mb-6 ml-4 space-y-1.5 border-l-2 border-white/20 pl-4">
+          <p><span class="text-[#7cb7ff]">"building"</span>  : <span>"可靠、克制、可持续维护的数字产品"</span></p>
+          <p><span class="text-[#7cb7ff]">"exploring"</span> : <span>"AI 协作 · 独立部署 · 个人知识系统"</span></p>
+          <p><span class="text-[#7cb7ff]">"principle"</span> : <span>"先理解约束，再选择工具"</span></p>
+          <p><span class="text-[#7cb7ff]">"writing"</span>   : <span>"基础设施 · 终端 · 工作流 · 底层思考"</span></p>
+        </div>
+
+        <!-- 命令4: cat contact.json -->
         <div class="mb-5">
           <span class="select-none text-[#7cb7ff]">$ </span>
           <span class="text-white/80">cat ~/contact.json</span>
