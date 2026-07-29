@@ -1,15 +1,11 @@
 ---
+import { categories as blogCategories } from '../config/blog';
 interface Props { limit?: number; }
 const { limit = 4 } = Astro.props;
 
-// 分类配置：slug → 显示名（中文名 / 英文缩写）
 const categories = [
   { slug: '全部', label: '全部 / all', tip: '聚合所有维度的内容与思考' },
-  { slug: 'nod', label: '节点 / nod', tip: '构成数字世界的底层基础设施与计算力' },
-  { slug: 'ter', label: '终端 / ter', tip: '人与数字世界交互的物理边界' },
-  { slug: 'wrk', label: '工作台 / wrk', tip: '个人数字环境的构建与秩序' },
-  { slug: 'ker', label: '内核 / ker', tip: '驱动一切运转的底层思维逻辑和个人沉淀' },
-  { slug: 'ovf', label: '溢出 / ovf', tip: '无规则的蔓延' },
+  ...blogCategories.map((category) => ({ slug: category.slug, label: category.shortLabel, tip: category.description })),
 ];
 ---
 
@@ -25,6 +21,8 @@ const categories = [
             : 'border border-gray-200 bg-white px-4 py-1.5 text-xs font-medium text-gray-500 transition-all hover:border-klein/30 hover:text-klein dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:border-klein/40 dark:hover:text-klein-300'
         ]}
         data-cat={cat.slug}
+        type="button"
+        aria-pressed={i === 0 ? 'true' : 'false'}
       >{cat.label}</button>
       <!-- 悬浮 HUD 提示 - 左侧克莱因蓝竖线，无箭头，浮现动效，双主题自适应 -->
       <div class="pointer-events-none absolute left-1/2 top-full z-50 mt-2.5 -translate-x-1/2 whitespace-nowrap leading-none rounded px-2 py-0.5 text-[11px] font-normal tracking-wide opacity-0 transition-all duration-200 ease-out translate-y-1 group-hover:translate-y-0 group-hover:opacity-100 group-hover:delay-150 bg-white text-[#9CA3AF] shadow-[0_4px_20px_rgba(0,0,0,0.08)] dark:bg-[#18181B] dark:text-[#9CA3AF] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)]" style="border-left:2px solid #002FA7;">
@@ -41,17 +39,7 @@ const categories = [
     var limit = parseInt(bar.dataset.limit || '4') || 4;
     var btns = document.querySelectorAll<HTMLButtonElement>('.cat-btn');
 
-    // 分类中文名映射（与 index.astro 同步）
-    var catLabel: Record<string, string> = {
-      '全部': '全部',
-      'nod': '节点',
-      'ter': '终端',
-      'wrk': '工作台',
-      'ker': '内核',
-      'ovf': '溢出',
-    };
-
-    function filterPosts(cat: string) {
+    function filterPosts(cat: string, updateUrl = true) {
       var cards = document.querySelectorAll<HTMLElement>('.post-card');
       var emptyState = document.getElementById('empty-state');
       var shown = 0;
@@ -87,7 +75,13 @@ const categories = [
         cards.forEach(function(c) { c.style.gridColumn = ''; });
       }
       var countEl = document.getElementById('visible-count');
-      if (countEl) countEl.textContent = cat === '全部' ? '' : ' · ' + (catLabel[cat] || cat);
+      if (countEl) countEl.textContent = ' · ' + shown + ' 篇';
+      if (updateUrl) {
+        var url = new URL(window.location.href);
+        if (cat === '全部') url.searchParams.delete('category');
+        else url.searchParams.set('category', cat);
+        history.pushState({ category: cat }, '', url);
+      }
     }
 
     var activeClass = 'bg-klein text-white shadow-sm shadow-klein/20';
@@ -96,12 +90,28 @@ const categories = [
     btns.forEach(function(btn) {
       btn.addEventListener('click', function() {
         btns.forEach(function(b) { b.className = inactiveClass; });
+        btns.forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
         btn.className = 'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all ' + activeClass;
+        btn.setAttribute('aria-pressed', 'true');
         filterPosts(btn.dataset.cat || '全部');
       });
     });
 
-    // 初始化：页面加载后立即过滤
-    filterPosts('全部');
+    function applyCategory(cat: string, updateUrl = false) {
+      var selected = Array.from(btns).find(function(btn) { return btn.dataset.cat === cat; }) || btns[0];
+      btns.forEach(function(b) {
+        b.className = inactiveClass;
+        b.setAttribute('aria-pressed', 'false');
+      });
+      selected.className = 'cat-btn rounded-full px-4 py-1.5 text-xs font-medium transition-all ' + activeClass;
+      selected.setAttribute('aria-pressed', 'true');
+      filterPosts(selected.dataset.cat || '全部', updateUrl);
+    }
+
+    var initialCategory = new URLSearchParams(location.search).get('category') || '全部';
+    applyCategory(initialCategory);
+    window.addEventListener('popstate', function() {
+      applyCategory(new URLSearchParams(location.search).get('category') || '全部');
+    });
   })();
 </script>
