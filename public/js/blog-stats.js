@@ -1,6 +1,6 @@
 (function () {
-  var SUPABASE_URL = 'https://eiakfxsvzmtvvfojtkln.supabase.co';
-  var SUPABASE_KEY = 'sb_publishable_g6uC-elVHyXAGaI-zy7bKQ_SoXsodpc';
+  var SUPABASE_URL = 'https://vbfbgzfiyhbjhmlmlzhs.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_o-YKAsUGWfLRXFAf7v3uTw_l8OI2wMv';
 
   function animateCount(el, target) {
     if (!el) return;
@@ -26,7 +26,7 @@
       SUPABASE_URL +
         '/rest/v1/blog_stats?slug=eq.' +
         encodeURIComponent(slug) +
-        '&select=views,likes,comments',
+        '&select=views,likes',
       {
         headers: {
           apikey: SUPABASE_KEY,
@@ -41,10 +41,9 @@
         if (data[0]) {
           animateCount(c.querySelector('.views-count'), data[0].views || 0);
           animateCount(c.querySelector('.likes-count'), data[0].likes || 0);
-          animateCount(c.querySelector('.comments-count'), data[0].comments || 0);
         } else {
           // 无数据时显示 0
-          ['.views-count', '.likes-count', '.comments-count'].forEach(function(sel) {
+          ['.views-count', '.likes-count'].forEach(function(sel) {
             var el = c.querySelector(sel);
             if (el) el.textContent = '0';
           });
@@ -52,7 +51,7 @@
       })
       .catch(function () {
         // 网络错误时显示 0
-        ['.views-count', '.likes-count', '.comments-count'].forEach(function(sel) {
+        ['.views-count', '.likes-count'].forEach(function(sel) {
           var el = c.querySelector(sel);
           if (el) el.textContent = '0';
         });
