@@ -8,8 +8,8 @@
 
 | 层 | 方案 |
 |---|---|
-| 框架 | [Astro](https://astro.build) SSG |
-| 样式 | [Tailwind CSS](https://tailwindcss.com) + `@tailwindcss/typography` |
+| 框架 | [Astro 7](https://astro.build) SSG |
+| 样式 | [Tailwind CSS 4](https://tailwindcss.com) + `@tailwindcss/typography` |
 | 评论 | [Giscus](https://giscus.app) (GitHub Discussions) |
 | 统计 | [Supabase](https://supabase.com) REST API |
 | 部署 | GitHub Pages + GitHub Actions |
@@ -38,7 +38,6 @@ MyBlog/
 │           ├── index.astro       # 文章列表
 │           └── [...slug].astro   # 文章详情
 ├── astro.config.mjs
-├── tailwind.config.mjs
 └── package.json
 ```
 
@@ -47,6 +46,8 @@ MyBlog/
 ```bash
 npm install
 npm run dev      # http://localhost:4321
+npm run check    # 类型与内容检查
+npm test         # 检查并构建
 npm run build    # 输出到 dist/
 ```
 
@@ -73,3 +74,9 @@ Supabase 初始化脚本：`scripts/supabase-migration.sql`
 
 表结构：
 - `blog_stats` — slug, views, likes, comments
+
+匿名访问只允许读取统计数据并调用受限的浏览/点赞计数函数，不能直接写表。修改迁移脚本后需要在 Supabase SQL Editor 中重新执行一次，使策略和函数更新生效。
+
+## 许可证
+
+[MIT](LICENSE)
