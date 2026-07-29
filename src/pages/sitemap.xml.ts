@@ -2,7 +2,7 @@ import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async () => {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
 
   // 静态页面
   const staticPages = [
@@ -24,7 +24,7 @@ export const GET: APIRoute = async () => {
     ...posts.map(
       (post) => `  <url>
     <loc>${baseUrl}/blog/${post.id}/</loc>
-    <lastmod>${post.data.date.toISOString().split('T')[0]}</lastmod>
+    <lastmod>${(post.data.updatedDate || post.data.date).toISOString().split('T')[0]}</lastmod>
     <priority>0.8</priority>
   </url>`
     ),
