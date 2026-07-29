@@ -23,17 +23,27 @@ MyBlog/
 ├── public/
 │   ├── CNAME                     # 自定义域名
 │   ├── favicon.svg
+│   ├── og-default.png            # 默认社交分享图
+│   ├── og-default.svg            # 社交分享图可编辑源文件
 │   └── js/blog-stats.js          # 统计脚本 (共享)
 ├── scripts/
 │   └── supabase-migration.sql    # 数据库建表
 ├── src/
 │   ├── components/
+│   │   ├── CategoryBar.astro
+│   │   ├── EmptyState.astro
+│   │   ├── Footer.astro
 │   │   ├── Header.astro
-│   │   └── Footer.astro
+│   │   └── TableOfContents.astro
+│   ├── config/blog.ts             # 分类与阅读时间配置
 │   ├── content/blog/             # Markdown 文章
 │   ├── layouts/BaseLayout.astro
 │   └── pages/
+│       ├── about.astro
 │       ├── index.astro           # 首页
+│       ├── robots.txt.ts
+│       ├── search-index.json.ts
+│       ├── sitemap.xml.ts
 │       └── blog/
 │           ├── index.astro       # 文章列表
 │           └── [...slug].astro   # 文章详情
