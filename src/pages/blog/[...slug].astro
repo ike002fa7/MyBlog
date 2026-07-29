@@ -98,7 +98,7 @@ const jsonLd = {
     </header>
 
     <!-- 文章正文 -->
-    <div class="prose prose-lg prose-gray mx-auto max-w-3xl dark:prose-invert">
+    <div class="prose prose-lg prose-gray max-w-none dark:prose-invert">
       <TableOfContents />
       <Content />
       {post.data.references.length > 0 && (
@@ -113,7 +113,7 @@ const jsonLd = {
       )}
     </div>
 
-    <nav class="mx-auto mt-14 grid max-w-3xl gap-4 border-t border-gray-100 pt-8 sm:grid-cols-2 dark:border-gray-800" aria-label="文章翻页">
+    <nav class="mt-14 grid gap-4 border-t border-gray-100 pt-8 sm:grid-cols-2 dark:border-gray-800" aria-label="文章翻页">
       {previousPost ? (
         <a href={`/blog/${previousPost.id}`} class="group rounded-xl border border-gray-200 p-4 transition hover:border-klein/40 dark:border-gray-800">
           <span class="font-mono text-xs text-gray-400">← 上一篇</span>
@@ -129,7 +129,7 @@ const jsonLd = {
     </nav>
 
     {relatedPosts.length > 0 && (
-      <section class="mx-auto mt-10 max-w-3xl" aria-labelledby="related-title">
+      <section class="mt-10" aria-labelledby="related-title">
         <h2 id="related-title" class="mb-4 font-mono text-xs uppercase tracking-[.2em] text-gray-400">同分类延伸阅读</h2>
         <div class="grid gap-3 sm:grid-cols-2">
           {relatedPosts.map((item) => (
