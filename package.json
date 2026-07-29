@@ -13,6 +13,7 @@
     "test": "npm run check && npm run build"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.19",
     "astro": "^7.1.5"
   },
   "devDependencies": {
